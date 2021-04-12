@@ -9,7 +9,7 @@ import UIKit
 
 public protocol TabBarDelegate: AnyObject {
 
-    func tabBar(_ tabBar: TabBar, didSelectItemAt index: Int)
+    func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int)
 
 }
 
@@ -44,7 +44,6 @@ public final class TabBar: UIView {
         super.init(frame: .zero)
 
         backgroundColor = .systemBackground
-
         addSubview(scrollView)
         scrollView.addSubview(hStack)
 
@@ -66,16 +65,13 @@ public final class TabBar: UIView {
     }
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
-
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
         strongSelf.selectItem(at: index)
-
     }
 
     private func selectItem(at index: Int) {
-
-        delegate?.tabBar(self, didSelectItemAt: index)
-        guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItem] else { return }
+        delegate?.tabBar(self, didSelectItemAtIndex: index)
+        guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
         tabBarItems.forEach { tabBarItem in
             tabBarItem.isSelected = false
         }
@@ -88,22 +84,89 @@ public final class TabBar: UIView {
         } else {
             scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
         }
-
     }
 
     private func configure() {
-
         hStack.subviews.forEach { view in
             view.removeFromSuperview()
         }
         items.forEach { item in
-            let tabBarItem = TabBarItem(item: item, didTapTabBarItemCallback: didTapTabBarItemCallback)
+            let tabBarItem = TabBarItemView(item: item, didTapTabBarItemCallback: didTapTabBarItemCallback)
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
             selectItem(at: 0)
         }
+    }
 
+}
+
+
+final class TabBarItemView: UIView {
+
+    private let item: UITabBarItem
+
+    var isSelected: Bool = false {
+        didSet {
+            titleLabel.textColor = isSelected ? .systemOrange : .secondaryLabel
+            itemImageView.tintColor = isSelected ? .systemOrange : .secondaryLabel
+        }
+    }
+
+    private let itemImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .secondaryLabel
+        return imageView
+    }()
+
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+
+    private lazy var tapGesture: UITapGestureRecognizer = {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        return tapGesture
+    }()
+
+    init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
+        self.item = item
+        super.init(frame: .zero)
+
+        addGestureRecognizer(tapGesture)
+        translatesAutoresizingMaskIntoConstraints = false
+        itemImageView.image = item.image
+        titleLabel.text = item.title
+        didTapTabBarItem = callback
+
+        addSubview(itemImageView)
+        addSubview(titleLabel)
+
+        NSLayoutConstraint.activate([
+            itemImageView.heightAnchor.constraint(equalToConstant: 20),
+            itemImageView.widthAnchor.constraint(equalToConstant: 20),
+            itemImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            itemImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: 5),
+            itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -5),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -5)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
+
+    @objc private func didTap() {
+        didTapTabBarItem(item)
     }
 
 }

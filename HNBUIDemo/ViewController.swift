@@ -54,7 +54,7 @@ class ViewController: UIViewController {
 
 extension ViewController: TabBarDelegate {
 
-    func tabBar(_ tabBar: TabBar, didSelectItemAt index: Int) {
+    func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int) {
         demoLabel.text = String(index)
     }
 
