@@ -53,9 +53,9 @@ public final class TabBar: UIView {
             scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             hStack.topAnchor.constraint(equalTo: self.topAnchor),
-            hStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
+            hStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             hStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            hStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -10),
+            hStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
         ])
 
     }
@@ -76,14 +76,10 @@ public final class TabBar: UIView {
             tabBarItem.isSelected = false
         }
         tabBarItems[index].isSelected = true
-        let offset = hStack.arrangedSubviews[index].center.x + 10 - (bounds.width / 2)
-        if offset < 0 {
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        } else if offset + bounds.width > hStack.bounds.width + 20 {
-            scrollView.setContentOffset(CGPoint(x: hStack.bounds.width + 20 - bounds.width, y: 0), animated: true)
-        } else {
-            scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-        }
+        let offset = hStack.arrangedSubviews[index].center.x + scrollView.layoutMargins.left - (bounds.width / 2)
+        let minimumOffset: CGFloat = 0
+        let maximumOffset = hStack.bounds.width - bounds.width
+        scrollView.setContentOffset(CGPoint(x: min(max(minimumOffset, offset), maximumOffset), y: 0), animated: true)
     }
 
     private func configure() {
@@ -116,7 +112,6 @@ final class TabBarItemView: UIView {
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.tintColor = .secondaryLabel
         return imageView
     }()
 
@@ -124,7 +119,6 @@ final class TabBarItemView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .footnote)
-        label.textColor = .secondaryLabel
         return label
     }()
 
@@ -147,15 +141,13 @@ final class TabBarItemView: UIView {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            itemImageView.heightAnchor.constraint(equalToConstant: 20),
-            itemImageView.widthAnchor.constraint(equalToConstant: 20),
             itemImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             itemImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-            itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: 5),
-            itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -5),
+            itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: layoutMargins.left),
+            itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -(layoutMargins.left)),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -5)
+            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right))
         ])
     }
 
