@@ -104,8 +104,7 @@ final class TabBarItemView: UIView {
 
     var isSelected: Bool = false {
         didSet {
-            titleLabel.textColor = isSelected ? .systemOrange : .secondaryLabel
-            itemImageView.tintColor = isSelected ? .systemOrange : .secondaryLabel
+            updateColors()
         }
     }
 
@@ -136,6 +135,7 @@ final class TabBarItemView: UIView {
         itemImageView.image = item.image
         titleLabel.text = item.title
         didTapTabBarItem = callback
+        updateColors()
 
         addSubview(itemImageView)
         addSubview(titleLabel)
@@ -159,6 +159,11 @@ final class TabBarItemView: UIView {
 
     @objc private func didTap() {
         didTapTabBarItem(item)
+    }
+
+    private func updateColors() {
+        titleLabel.textColor = isSelected ? .systemOrange : .secondaryLabel
+        itemImageView.tintColor = isSelected ? .systemOrange : .secondaryLabel
     }
 
 }
