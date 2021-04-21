@@ -9,19 +9,29 @@ import UIKit
 
 public protocol TabBarDelegate: AnyObject {
 
+    func tabBar(_ tabBar: TabBar, didTapSelectedItemAtIndex index: Int)
+
+}
+
+internal protocol TabBarInternalDelegate: AnyObject {
+
     func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int)
 
 }
 
 public final class TabBar: UIView {
 
-    public weak var delegate: TabBarDelegate?
+    internal weak var delegate: TabBarDelegate?
+
+    internal weak var internalDelegate: TabBarInternalDelegate?
 
     public var items: [UITabBarItem] = [] {
         didSet {
             configure()
         }
     }
+
+    public private(set) var selectedItemIndex = 0
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -40,7 +50,7 @@ public final class TabBar: UIView {
         return hStack
     }()
 
-    public init() {
+    internal init() {
         super.init(frame: .zero)
 
         backgroundColor = .systemBackground
@@ -60,26 +70,32 @@ public final class TabBar: UIView {
 
     }
 
-    required init?(coder: NSCoder) {
+    internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
-        strongSelf.selectItem(at: index)
+        if strongSelf.selectedItemIndex == index {
+            strongSelf.delegate?.tabBar(strongSelf, didTapSelectedItemAtIndex: index)
+        } else {
+            strongSelf.selectItemAtIndex(index)
+            strongSelf.internalDelegate?.tabBar(strongSelf, didSelectItemAtIndex: index)
+        }
     }
 
-    private func selectItem(at index: Int) {
-        delegate?.tabBar(self, didSelectItemAtIndex: index)
+    internal func highlightItemAtIndex(_ index: Int) {
         guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
         tabBarItems.forEach { tabBarItem in
             tabBarItem.isSelected = false
         }
         tabBarItems[index].isSelected = true
-        let offset = hStack.arrangedSubviews[index].center.x + scrollView.layoutMargins.left - (bounds.width / 2)
-        let minimumOffset: CGFloat = 0
-        let maximumOffset = hStack.bounds.width - bounds.width
-        scrollView.setContentOffset(CGPoint(x: min(max(minimumOffset, offset), maximumOffset), y: 0), animated: true)
+    }
+
+    internal func selectItemAtIndex(_ index: Int) {
+        highlightItemAtIndex(index)
+        selectedItemIndex = index
+        scrollView.setContentOffset(CGPoint(x: contentOffsetXToCenterTabBarItem(at: index), y: 0), animated: true)
     }
 
     private func configure() {
@@ -91,8 +107,24 @@ public final class TabBar: UIView {
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
-            selectItem(at: 0)
+            selectItemAtIndex(0)
         }
+    }
+
+    internal func adjustTabBarItemPosition(byRate contentOffsetXMoveRate: CGFloat) {
+        let nextIndex = contentOffsetXMoveRate > 0 ? selectedItemIndex + 1 : selectedItemIndex - 1
+        guard nextIndex >= 0, nextIndex < items.count else { return }
+        let currentSelectedItemContentOffset = contentOffsetXToCenterTabBarItem(at: selectedItemIndex)
+        let distanceFromCurrentItemToNextItem = abs(contentOffsetXToCenterTabBarItem(at: selectedItemIndex) - contentOffsetXToCenterTabBarItem(at: nextIndex))
+        highlightItemAtIndex(abs(contentOffsetXMoveRate) < 0.5 ? selectedItemIndex : nextIndex)
+        scrollView.setContentOffset(CGPoint(x: currentSelectedItemContentOffset + (distanceFromCurrentItemToNextItem * contentOffsetXMoveRate), y: 0), animated: false)
+    }
+
+    private func contentOffsetXToCenterTabBarItem(at index: Int) -> CGFloat {
+        let offset = hStack.arrangedSubviews[index].center.x + scrollView.layoutMargins.left - (bounds.width / 2)
+        let minimumOffset: CGFloat = 0
+        let maximumOffset = hStack.bounds.width - bounds.width
+        return min(max(minimumOffset, offset), maximumOffset)
     }
 
 }
@@ -102,7 +134,7 @@ final class TabBarItemView: UIView {
 
     private let item: UITabBarItem
 
-    var isSelected: Bool = false {
+    fileprivate var isSelected: Bool = false {
         didSet {
             updateColors()
         }
@@ -126,7 +158,7 @@ final class TabBarItemView: UIView {
         return tapGesture
     }()
 
-    init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
+    fileprivate init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
         self.item = item
         super.init(frame: .zero)
 
@@ -155,7 +187,7 @@ final class TabBarItemView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
+    private var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
 
     @objc private func didTap() {
         didTapTabBarItem(item)
