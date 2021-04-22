@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class TabBarController: UIViewController, TabBarDelegate {
+open class TabBarController: UIViewController {
 
     private var shouldScrollTabBar = true
 
@@ -63,22 +63,20 @@ open class TabBarController: UIViewController, TabBarDelegate {
         super.viewDidLoad()
 
         tabBar.delegate = self
-        tabBar.internalDelegate = self
         containerScrollView.delegate = self
     }
 
-    open func tabBar(_ tabBar: TabBar, didTapSelectedItemAtIndex index: Int) { }
-
-    open func tabBar(_ tabBar: TabBar, didTapItemAtIndex index: Int) { }
+    open func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController) { }
 
 }
 
-extension TabBarController: TabBarInternalDelegate {
+extension TabBarController: TabBarDelegate {
 
     func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int) {
         shouldScrollTabBar = false
         containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
-        self.tabBar(tabBar, didTapItemAtIndex: index)
+        guard let viewControllers = viewControllers else { return }
+        tabBarController(self, didSelect: viewControllers[index])
     }
 
 }

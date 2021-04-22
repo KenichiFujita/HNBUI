@@ -7,13 +7,7 @@
 
 import UIKit
 
-public protocol TabBarDelegate: AnyObject {
-
-    func tabBar(_ tabBar: TabBar, didTapSelectedItemAtIndex index: Int)
-
-}
-
-internal protocol TabBarInternalDelegate: AnyObject {
+internal protocol TabBarDelegate: AnyObject {
 
     func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int)
 
@@ -22,8 +16,6 @@ internal protocol TabBarInternalDelegate: AnyObject {
 public final class TabBar: UIView {
 
     internal weak var delegate: TabBarDelegate?
-
-    internal weak var internalDelegate: TabBarInternalDelegate?
 
     public var unselectedItemTintColor: UIColor?
 
@@ -84,12 +76,10 @@ public final class TabBar: UIView {
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
-        if strongSelf.selectedItemIndex == index {
-            strongSelf.delegate?.tabBar(strongSelf, didTapSelectedItemAtIndex: index)
-        } else {
+        if strongSelf.selectedItemIndex != index {
             strongSelf.selectItemAtIndex(index)
-            strongSelf.internalDelegate?.tabBar(strongSelf, didSelectItemAtIndex: index)
         }
+        strongSelf.delegate?.tabBar(strongSelf, didSelectItemAtIndex: index)
     }
 
     internal func highlightItemAtIndex(_ index: Int) {

@@ -42,8 +42,6 @@ class TabBarViewController: TabBarController {
         return viewController
     }
 
-    override func tabBar(_ tabBar: TabBar, didTapSelectedItemAtIndex index: Int) { }
-
-    override func tabBar(_ tabBar: TabBar, didTapItemAtIndex index: Int) { }
+    override func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController) { }
 
 }
