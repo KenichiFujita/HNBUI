@@ -25,6 +25,14 @@ public final class TabBar: UIView {
 
     internal weak var internalDelegate: TabBarInternalDelegate?
 
+    public var unselectedItemTintColor: UIColor?
+
+    public var barTintColor: UIColor? {
+        didSet {
+            self.backgroundColor = barTintColor
+        }
+    }
+
     public var items: [UITabBarItem] = [] {
         didSet {
             configure()
@@ -103,7 +111,7 @@ public final class TabBar: UIView {
             view.removeFromSuperview()
         }
         items.forEach { item in
-            let tabBarItem = TabBarItemView(item: item, didTapTabBarItemCallback: didTapTabBarItemCallback)
+            let tabBarItem = TabBarItemView(item: item, unselectedItemTintColor: unselectedItemTintColor, didTapTabBarItemCallback: didTapTabBarItemCallback)
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
@@ -134,6 +142,8 @@ final class TabBarItemView: UIView {
 
     private let item: UITabBarItem
 
+    private var unselectedItemTintColor: UIColor?
+
     fileprivate var isSelected: Bool = false {
         didSet {
             updateColors()
@@ -158,8 +168,9 @@ final class TabBarItemView: UIView {
         return tapGesture
     }()
 
-    fileprivate init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
+    fileprivate init(item: UITabBarItem, unselectedItemTintColor: UIColor?, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
         self.item = item
+        self.unselectedItemTintColor = unselectedItemTintColor
         super.init(frame: .zero)
 
         addGestureRecognizer(tapGesture)
@@ -194,8 +205,8 @@ final class TabBarItemView: UIView {
     }
 
     private func updateColors() {
-        titleLabel.textColor = isSelected ? .systemOrange : .secondaryLabel
-        itemImageView.tintColor = isSelected ? .systemOrange : .secondaryLabel
+        titleLabel.textColor = isSelected ? tintColor : unselectedItemTintColor ?? .secondaryLabel
+        itemImageView.tintColor = isSelected ? tintColor : unselectedItemTintColor ?? .secondaryLabel
     }
 
 }
