@@ -17,8 +17,6 @@ public final class TabBar: UIView {
 
     internal weak var delegate: TabBarDelegate?
 
-    public var unselectedItemTintColor: UIColor?
-
     public var barTintColor: UIColor? {
         didSet {
             self.backgroundColor = barTintColor
@@ -31,7 +29,43 @@ public final class TabBar: UIView {
         }
     }
 
-    public private(set) var selectedItemIndex = 0
+    public var selectedItemIndex: Int {
+        get {
+            Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))
+        }
+        set {
+            _continuousIndex = CGFloat(newValue)
+            adjustTabBarItemPosition(to: _continuousIndex, animated: true)
+        }
+//        didSet {
+//            highlightItemAtIndex()
+//        }
+    }
+
+    internal var continuousIndex: CGFloat {
+        get {
+            return _continuousIndex
+        }
+        set {
+//            selectedItemIndex = Int(continuousIndex.rounded(.toNearestOrAwayFromZero))
+            _continuousIndex = newValue
+            adjustTabBarItemPosition(to: _continuousIndex, animated: false)
+        }
+    }
+
+    private var _continuousIndex: CGFloat = 0 {
+        didSet(oldValue) {
+            let oldSelectedItemIndex = Int(oldValue.rounded(.toNearestOrAwayFromZero))
+            if (oldSelectedItemIndex != selectedItemIndex) {
+                guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
+                tabBarItems.forEach { tabBarItem in
+                    tabBarItem.isSelected = false
+                }
+                tabBarItems[selectedItemIndex].isSelected = true
+                delegate?.tabBar(self, didSelectItemAtIndex: selectedItemIndex)
+            }
+        }
+    }
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -76,24 +110,17 @@ public final class TabBar: UIView {
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
-        if strongSelf.selectedItemIndex != index {
-            strongSelf.selectItemAtIndex(index)
-        }
-        strongSelf.delegate?.tabBar(strongSelf, didSelectItemAtIndex: index)
+//        strongSelf.delegate?.tabBar(strongSelf, didSelectItemAtIndex: index, didSelectSameItem: strongSelf.selectedItemIndex == index)
+//        strongSelf.adjustTabBarItemPosition(to: CGFloat(index), animated: true)
+        strongSelf.selectedItemIndex = index
     }
 
-    internal func highlightItemAtIndex(_ index: Int) {
-        guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
-        tabBarItems.forEach { tabBarItem in
-            tabBarItem.isSelected = false
-        }
-        tabBarItems[index].isSelected = true
-    }
-
-    internal func selectItemAtIndex(_ index: Int) {
-        highlightItemAtIndex(index)
-        selectedItemIndex = index
-        scrollView.setContentOffset(CGPoint(x: contentOffsetXToCenterTabBarItem(at: index), y: 0), animated: true)
+    private func highlightItemAtIndex() {
+//        guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
+//        tabBarItems.forEach { tabBarItem in
+//            tabBarItem.isSelected = false
+//        }
+//        tabBarItems[selectedItemIndex].isSelected = true
     }
 
     private func configure() {
@@ -101,24 +128,24 @@ public final class TabBar: UIView {
             view.removeFromSuperview()
         }
         items.forEach { item in
-            let tabBarItem = TabBarItemView(item: item, unselectedItemTintColor: unselectedItemTintColor, didTapTabBarItemCallback: didTapTabBarItemCallback)
+            let tabBarItem = TabBarItemView(item: item, didTapTabBarItemCallback: didTapTabBarItemCallback)
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
-            selectItemAtIndex(0)
+            selectedItemIndex = 0
         }
     }
 
-    internal func adjustTabBarItemPosition(byRate contentOffsetXMoveRate: CGFloat) {
-        let nextIndex = contentOffsetXMoveRate > 0 ? selectedItemIndex + 1 : selectedItemIndex - 1
-        guard nextIndex >= 0, nextIndex < items.count else { return }
-        let currentSelectedItemContentOffset = contentOffsetXToCenterTabBarItem(at: selectedItemIndex)
-        let distanceFromCurrentItemToNextItem = abs(contentOffsetXToCenterTabBarItem(at: selectedItemIndex) - contentOffsetXToCenterTabBarItem(at: nextIndex))
-        highlightItemAtIndex(abs(contentOffsetXMoveRate) < 0.5 ? selectedItemIndex : nextIndex)
-        scrollView.setContentOffset(CGPoint(x: currentSelectedItemContentOffset + (distanceFromCurrentItemToNextItem * contentOffsetXMoveRate), y: 0), animated: false)
+    private func adjustTabBarItemPosition(to index: CGFloat, animated: Bool) {
+        let distanceBetweenItems = (contentOffsetXToCenterTabBarItem(at: Int(index) + 1) - contentOffsetXToCenterTabBarItem(at: Int(index))) * continuousIndex.truncatingRemainder(dividingBy: 1)
+        let contentOffsetX = contentOffsetXToCenterTabBarItem(at: Int(index)) + distanceBetweenItems
+        scrollView.setContentOffset(CGPoint(x: contentOffsetX, y: 0), animated: animated)
     }
 
     private func contentOffsetXToCenterTabBarItem(at index: Int) -> CGFloat {
+        guard index >= 0, index < items.count else {
+            return 0
+        }
         let offset = hStack.arrangedSubviews[index].center.x + scrollView.layoutMargins.left - (bounds.width / 2)
         let minimumOffset: CGFloat = 0
         let maximumOffset = hStack.bounds.width - bounds.width
@@ -158,9 +185,8 @@ final class TabBarItemView: UIView {
         return tapGesture
     }()
 
-    fileprivate init(item: UITabBarItem, unselectedItemTintColor: UIColor?, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
+    fileprivate init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
         self.item = item
-        self.unselectedItemTintColor = unselectedItemTintColor
         super.init(frame: .zero)
 
         addGestureRecognizer(tapGesture)
@@ -195,8 +221,8 @@ final class TabBarItemView: UIView {
     }
 
     private func updateColors() {
-        titleLabel.textColor = isSelected ? tintColor : unselectedItemTintColor ?? .secondaryLabel
-        itemImageView.tintColor = isSelected ? tintColor : unselectedItemTintColor ?? .secondaryLabel
+        titleLabel.textColor = isSelected ? tintColor : .secondaryLabel
+        itemImageView.tintColor = isSelected ? tintColor : .secondaryLabel
     }
 
 }

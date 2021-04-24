@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol TabBarControllerDelegate {
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController)
+}
+
 open class TabBarController: UIViewController {
 
     private var shouldScrollTabBar = true
@@ -75,6 +80,7 @@ extension TabBarController: TabBarDelegate {
     func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int) {
         shouldScrollTabBar = false
         containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
+
         guard let viewControllers = viewControllers else { return }
         tabBarController(self, didSelect: viewControllers[index])
     }
@@ -85,18 +91,18 @@ extension TabBarController: TabBarDelegate {
 extension TabBarController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldScrollTabBar else { return }
-        let scrollDistanceRate = (scrollView.contentOffset.x - (view.bounds.width * CGFloat(tabBar.selectedItemIndex))) / view.bounds.width
-        if abs(scrollDistanceRate) > 1 {
-            tabBar.selectItemAtIndex(min(viewControllers!.count - 1, max(0, tabBar.selectedItemIndex + Int(scrollDistanceRate))))
-        } else {
-            tabBar.adjustTabBarItemPosition(byRate: (scrollView.contentOffset.x - (view.bounds.width * CGFloat(tabBar.selectedItemIndex))) / view.bounds.width)
+        guard shouldScrollTabBar,
+              let viewControllers = viewControllers
+        else {
+            return
         }
+        let continuousIndex = (scrollView.contentOffset.x / view.bounds.width).rounded(.down) + (scrollView.contentOffset.x.truncatingRemainder(dividingBy: view.bounds.width) / view.bounds.width)
+        tabBar.continuousIndex = min(max(0, continuousIndex), CGFloat(viewControllers.count - 1))
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard shouldScrollTabBar else { return }
-        tabBar.selectItemAtIndex(Int(scrollView.contentOffset.x / view.bounds.width))
+        tabBar.continuousIndex = scrollView.contentOffset.x / view.bounds.width
     }
 
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
