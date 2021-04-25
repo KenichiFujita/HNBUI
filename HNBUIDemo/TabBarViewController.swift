@@ -42,6 +42,4 @@ class TabBarViewController: TabBarController {
         return viewController
     }
 
-    override func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController) { }
-
 }

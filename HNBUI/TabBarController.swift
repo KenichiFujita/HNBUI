@@ -7,14 +7,16 @@
 
 import UIKit
 
-protocol TabBarControllerDelegate {
+public protocol TabBarControllerDelegate: AnyObject {
 
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController)
+    func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController)
 }
 
 open class TabBarController: UIViewController {
 
-    private var shouldScrollTabBar = true
+    public weak var delegate: TabBarControllerDelegate?
+
+    private var shouldScrollTabBar = false
 
     public var viewControllers: [UIViewController]? {
         didSet {
@@ -71,18 +73,16 @@ open class TabBarController: UIViewController {
         containerScrollView.delegate = self
     }
 
-    open func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController) { }
-
 }
 
 extension TabBarController: TabBarDelegate {
 
     func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int) {
-        shouldScrollTabBar = false
-        containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
-
+        if !shouldScrollTabBar {
+            containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
+        }
         guard let viewControllers = viewControllers else { return }
-        tabBarController(self, didSelect: viewControllers[index])
+        delegate?.tabBarController(self, didSelect: viewControllers[index])
     }
 
 }
@@ -90,23 +90,17 @@ extension TabBarController: TabBarDelegate {
 
 extension TabBarController: UIScrollViewDelegate {
 
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        shouldScrollTabBar = true
+    }
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldScrollTabBar,
-              let viewControllers = viewControllers
-        else {
-            return
-        }
-        let continuousIndex = (scrollView.contentOffset.x / view.bounds.width).rounded(.down) + (scrollView.contentOffset.x.truncatingRemainder(dividingBy: view.bounds.width) / view.bounds.width)
-        tabBar.continuousIndex = min(max(0, continuousIndex), CGFloat(viewControllers.count - 1))
+        guard shouldScrollTabBar, let viewControllers = viewControllers else { return }
+        tabBar.continuousIndex = min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1))
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard shouldScrollTabBar else { return }
-        tabBar.continuousIndex = scrollView.contentOffset.x / view.bounds.width
-    }
-
-    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        shouldScrollTabBar = true
+        shouldScrollTabBar = false
     }
 
 }
