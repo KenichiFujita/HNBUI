@@ -30,21 +30,12 @@ public final class TabBar: UIView {
     }
 
     public var selectedItem: UITabBarItem? {
-        didSet {
-            guard let item = selectedItem, let index = items.firstIndex(of: item) else { return }
-            if selectedItemIndex != index {
-                _continuousIndex = CGFloat(index)
-                adjustTabBarItemPosition(to: _continuousIndex, animated: true)
-            }
-        }
-    }
-
-    public var selectedItemIndex: Int {
         get {
-            Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))
+            return items[Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))]
         }
         set {
-            _continuousIndex = CGFloat(newValue)
+            guard let item = newValue, let index = items.firstIndex(of: item) else { return }
+            _continuousIndex = CGFloat(index)
             adjustTabBarItemPosition(to: _continuousIndex, animated: true)
         }
     }
@@ -59,16 +50,15 @@ public final class TabBar: UIView {
         }
     }
 
-    private var _continuousIndex: CGFloat = 0 {
+    private var _continuousIndex: CGFloat = -1 {
         didSet(oldValue) {
-            if (selectedItem != items[selectedItemIndex]) {
+            if (_continuousIndex != oldValue) {
                 guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
                 tabBarItems.forEach { tabBarItem in
                     tabBarItem.isSelected = false
                 }
-                tabBarItems[selectedItemIndex].isSelected = true
-                selectedItem = items[selectedItemIndex]
-                delegate?.tabBar(self, didSelectItemAtIndex: selectedItemIndex)
+                tabBarItems[Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))].isSelected = true
+                delegate?.tabBar(self, didSelectItemAtIndex: Int(_continuousIndex.rounded(.toNearestOrAwayFromZero)))
             }
         }
     }
@@ -116,7 +106,7 @@ public final class TabBar: UIView {
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
-        strongSelf.selectedItemIndex = index
+        strongSelf.selectedItem = strongSelf.items[index]
     }
 
     private func configure() {
@@ -128,7 +118,7 @@ public final class TabBar: UIView {
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
-            selectedItemIndex = 0
+            selectedItem = items[0]
         }
     }
 
