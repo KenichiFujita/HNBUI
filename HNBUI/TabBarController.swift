@@ -20,7 +20,17 @@ open class TabBarController: UIViewController {
 
     public var viewControllers: [UIViewController]? {
         didSet {
-            guard let viewControllers = viewControllers else { return }
+            guard let viewControllers = viewControllers else {
+                containerScrollView.contentSize = CGSize(width: 0, height: 0)
+                containerScrollView.subviews.forEach { subview in
+                    subview.removeFromSuperview()
+                }
+                children.forEach { childViewController in
+                    childViewController.willMove(toParent: nil)
+                    childViewController.removeFromParent()
+                }
+                return
+            }
             tabBar.items = viewControllers.map { viewController in
                 viewController.tabBarItem
             }
@@ -77,11 +87,15 @@ open class TabBarController: UIViewController {
 
 extension TabBarController: TabBarDelegate {
 
-    func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int) {
+    public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem) {
+        guard let viewControllers = viewControllers,
+              let index = tabBar.items.firstIndex(of: item)
+        else {
+            return
+        }
         if !shouldScrollTabBar {
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
         }
-        guard let viewControllers = viewControllers else { return }
         delegate?.tabBarController(self, didSelect: viewControllers[index])
     }
 
@@ -94,9 +108,13 @@ extension TabBarController: UIScrollViewDelegate {
         shouldScrollTabBar = true
     }
 
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        shouldScrollTabBar = true
+    }
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard shouldScrollTabBar, let viewControllers = viewControllers else { return }
-        tabBar.continuousIndex = min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1))
+        tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)))
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

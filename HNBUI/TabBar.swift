@@ -7,15 +7,15 @@
 
 import UIKit
 
-internal protocol TabBarDelegate: AnyObject {
+public protocol TabBarDelegate: AnyObject {
 
-    func tabBar(_ tabBar: TabBar, didSelectItemAtIndex index: Int)
+    func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem)
 
 }
 
 public final class TabBar: UIView {
 
-    internal weak var delegate: TabBarDelegate?
+    public weak var delegate: TabBarDelegate?
 
     public var barTintColor: UIColor? {
         didSet {
@@ -31,35 +31,34 @@ public final class TabBar: UIView {
 
     public var selectedItem: UITabBarItem? {
         get {
-            return items[Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))]
-        }
-        set {
-            guard let item = newValue, let index = items.firstIndex(of: item) else { return }
-            _continuousIndex = CGFloat(index)
-            adjustTabBarItemPosition(to: _continuousIndex, animated: true)
-        }
-    }
-
-    internal var continuousIndex: CGFloat {
-        get {
-            return _continuousIndex
-        }
-        set {
-            _continuousIndex = newValue
-            adjustTabBarItemPosition(to: _continuousIndex, animated: false)
-        }
-    }
-
-    private var _continuousIndex: CGFloat = -1 {
-        didSet(oldValue) {
-            if (_continuousIndex != oldValue) {
-                guard let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView] else { return }
-                tabBarItems.forEach { tabBarItem in
-                    tabBarItem.isSelected = false
-                }
-                tabBarItems[Int(_continuousIndex.rounded(.toNearestOrAwayFromZero))].isSelected = true
-                delegate?.tabBar(self, didSelectItemAtIndex: Int(_continuousIndex.rounded(.toNearestOrAwayFromZero)))
+            guard let continuousIndex = continuousIndex else {
+                return nil
             }
+            return items[Int(continuousIndex.rounded(.toNearestOrAwayFromZero))]
+        }
+        set {
+            guard let item = newValue, let index = items.firstIndex(of: item) else {
+                continuousIndex = nil
+                return
+            }
+            continuousIndex = CGFloat(index)
+            scrollView.setContentOffset(contentOffsetForContinuousIndex(CGFloat(index)), animated: true)
+        }
+    }
+
+    private var continuousIndex: CGFloat? = -1 {
+        didSet(oldValue) {
+            guard continuousIndex?.rounded(.toNearestOrAwayFromZero) != oldValue?.rounded(.toNearestOrAwayFromZero),
+                  let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
+                  let roundedContinuousIndex = continuousIndex?.rounded(.toNearestOrAwayFromZero)
+            else {
+                return
+            }
+            tabBarItems.forEach { tabBarItem in
+                tabBarItem.isSelected = false
+            }
+            tabBarItems[Int(roundedContinuousIndex)].isSelected = true
+            delegate?.tabBar(self, didSelectItem: items[Int(roundedContinuousIndex)])
         }
     }
 
@@ -104,6 +103,11 @@ public final class TabBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    internal func setContinuousIndex(_ continuousIndex: CGFloat) {
+        self.continuousIndex = continuousIndex
+        scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: false)
+    }
+
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
         strongSelf.selectedItem = strongSelf.items[index]
@@ -122,10 +126,10 @@ public final class TabBar: UIView {
         }
     }
 
-    private func adjustTabBarItemPosition(to index: CGFloat, animated: Bool) {
-        let distanceBetweenItems = (contentOffsetXToCenterTabBarItem(at: Int(index) + 1) - contentOffsetXToCenterTabBarItem(at: Int(index))) * continuousIndex.truncatingRemainder(dividingBy: 1)
-        let contentOffsetX = contentOffsetXToCenterTabBarItem(at: Int(index)) + distanceBetweenItems
-        scrollView.setContentOffset(CGPoint(x: contentOffsetX, y: 0), animated: animated)
+    private func contentOffsetForContinuousIndex(_ continuousIndex: CGFloat) -> CGPoint {
+        let distanceBetweenItems = (contentOffsetXToCenterTabBarItem(at: Int(continuousIndex) + 1) - contentOffsetXToCenterTabBarItem(at: Int(continuousIndex))) * continuousIndex.truncatingRemainder(dividingBy: 1)
+        let contentOffsetX = contentOffsetXToCenterTabBarItem(at: Int(continuousIndex)) + distanceBetweenItems
+        return CGPoint(x: contentOffsetX, y: 0)
     }
 
     private func contentOffsetXToCenterTabBarItem(at index: Int) -> CGFloat {
@@ -144,8 +148,6 @@ public final class TabBar: UIView {
 final class TabBarItemView: UIView {
 
     private let item: UITabBarItem
-
-    private var unselectedItemTintColor: UIColor?
 
     fileprivate var isSelected: Bool = false {
         didSet {
