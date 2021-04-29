@@ -34,7 +34,7 @@ public final class TabBar: UIView {
             guard let continuousIndex = continuousIndex else {
                 return nil
             }
-            return items[Int(continuousIndex.rounded(.toNearestOrAwayFromZero))]
+            return items[continuousIndex.roundedInt()]
         }
         set {
             guard let item = newValue, let index = items.firstIndex(of: item) else {
@@ -42,23 +42,23 @@ public final class TabBar: UIView {
                 return
             }
             continuousIndex = CGFloat(index)
-            scrollView.setContentOffset(contentOffsetForContinuousIndex(CGFloat(index)), animated: true)
+            setContinuousIndex(CGFloat(index), animated: true)
         }
     }
 
-    private var continuousIndex: CGFloat? = -1 {
+    private var continuousIndex: CGFloat? {
         didSet(oldValue) {
             guard continuousIndex?.rounded(.toNearestOrAwayFromZero) != oldValue?.rounded(.toNearestOrAwayFromZero),
                   let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
-                  let roundedContinuousIndex = continuousIndex?.rounded(.toNearestOrAwayFromZero)
+                  let continuousIndex = continuousIndex
             else {
                 return
             }
             tabBarItems.forEach { tabBarItem in
                 tabBarItem.isSelected = false
             }
-            tabBarItems[Int(roundedContinuousIndex)].isSelected = true
-            delegate?.tabBar(self, didSelectItem: items[Int(roundedContinuousIndex)])
+            tabBarItems[continuousIndex.roundedInt()].isSelected = true
+            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()])
         }
     }
 
@@ -103,9 +103,9 @@ public final class TabBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    internal func setContinuousIndex(_ continuousIndex: CGFloat) {
+    internal func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
         self.continuousIndex = continuousIndex
-        scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: false)
+        scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
     }
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
@@ -118,7 +118,8 @@ public final class TabBar: UIView {
             view.removeFromSuperview()
         }
         items.forEach { item in
-            let tabBarItem = TabBarItemView(item: item, didTapTabBarItemCallback: didTapTabBarItemCallback)
+            let tabBarItem = TabBarItemView(item: item)
+            tabBarItem.didTapTabBarItem = didTapTabBarItemCallback
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
@@ -145,7 +146,7 @@ public final class TabBar: UIView {
 }
 
 
-final class TabBarItemView: UIView {
+fileprivate final class TabBarItemView: UIView {
 
     private let item: UITabBarItem
 
@@ -173,7 +174,7 @@ final class TabBarItemView: UIView {
         return tapGesture
     }()
 
-    fileprivate init(item: UITabBarItem, didTapTabBarItemCallback callback: @escaping (UITabBarItem) -> ()) {
+    fileprivate init(item: UITabBarItem) {
         self.item = item
         super.init(frame: .zero)
 
@@ -181,7 +182,6 @@ final class TabBarItemView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         itemImageView.image = item.image
         titleLabel.text = item.title
-        didTapTabBarItem = callback
         updateColors()
 
         addSubview(itemImageView)
@@ -202,7 +202,7 @@ final class TabBarItemView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
+    fileprivate var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
 
     @objc private func didTap() {
         didTapTabBarItem(item)
@@ -211,6 +211,14 @@ final class TabBarItemView: UIView {
     private func updateColors() {
         titleLabel.textColor = isSelected ? tintColor : .secondaryLabel
         itemImageView.tintColor = isSelected ? tintColor : .secondaryLabel
+    }
+
+}
+
+fileprivate extension CGFloat {
+
+    func roundedInt() -> Int {
+        return Int(self.rounded(.toNearestOrAwayFromZero))
     }
 
 }

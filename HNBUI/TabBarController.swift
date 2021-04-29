@@ -114,7 +114,7 @@ extension TabBarController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard shouldScrollTabBar, let viewControllers = viewControllers else { return }
-        tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)))
+        tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)), animated: false)
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
