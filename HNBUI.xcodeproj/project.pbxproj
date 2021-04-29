@@ -12,11 +12,11 @@
 		22986200260F895100F7535A /* HNBUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 229861F2260F895100F7535A /* HNBUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22986212260F89B800F7535A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986211260F89B800F7535A /* AppDelegate.swift */; };
 		22986214260F89B800F7535A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986213260F89B800F7535A /* SceneDelegate.swift */; };
-		22986216260F89B800F7535A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986215260F89B800F7535A /* ViewController.swift */; };
 		2298621B260F89B900F7535A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2298621A260F89B900F7535A /* Assets.xcassets */; };
 		2298621E260F89B900F7535A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2298621C260F89B900F7535A /* LaunchScreen.storyboard */; };
 		22986248260F8A3000F7535A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986247260F8A3000F7535A /* TabBarController.swift */; };
 		22986256260FB79D00F7535A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986255260FB79D00F7535A /* TabBar.swift */; };
+		22BDE25026271CDD0055E1AA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,12 +46,12 @@
 		2298620F260F89B800F7535A /* HNBUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HNBUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22986211260F89B800F7535A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22986213260F89B800F7535A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		22986215260F89B800F7535A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2298621A260F89B900F7535A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2298621D260F89B900F7535A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2298621F260F89B900F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22986247260F8A3000F7535A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		22986255260FB79D00F7535A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +125,7 @@
 			children = (
 				22986211260F89B800F7535A /* AppDelegate.swift */,
 				22986213260F89B800F7535A /* SceneDelegate.swift */,
-				22986215260F89B800F7535A /* ViewController.swift */,
+				22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */,
 				2298621A260F89B900F7535A /* Assets.xcassets */,
 				2298621C260F89B900F7535A /* LaunchScreen.storyboard */,
 				2298621F260F89B900F7535A /* Info.plist */,
@@ -290,7 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22986216260F89B800F7535A /* ViewController.swift in Sources */,
+				22BDE25026271CDD0055E1AA /* TabBarViewController.swift in Sources */,
 				22986212260F89B800F7535A /* AppDelegate.swift in Sources */,
 				22986214260F89B800F7535A /* SceneDelegate.swift in Sources */,
 			);
