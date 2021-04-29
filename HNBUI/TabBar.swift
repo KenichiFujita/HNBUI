@@ -41,7 +41,6 @@ public final class TabBar: UIView {
                 continuousIndex = nil
                 return
             }
-            continuousIndex = CGFloat(index)
             setContinuousIndex(CGFloat(index), animated: true)
         }
     }
