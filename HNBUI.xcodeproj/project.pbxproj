@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221B3306263F74B000C7404E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 221B3305263F74B000C7404E /* README.md */; };
 		229861F9260F895100F7535A /* HNBUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229861EF260F895100F7535A /* HNBUI.framework */; };
-		229861FE260F895100F7535A /* HNBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229861FD260F895100F7535A /* HNBUITests.swift */; };
 		22986200260F895100F7535A /* HNBUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 229861F2260F895100F7535A /* HNBUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22986212260F89B800F7535A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986211260F89B800F7535A /* AppDelegate.swift */; };
 		22986214260F89B800F7535A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986213260F89B800F7535A /* SceneDelegate.swift */; };
@@ -37,11 +37,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		221B3300263F74A400C7404E /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		221B3305263F74B000C7404E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		221B3314263F74CE00C7404E /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		221B3332263F75D700C7404E /* HNBUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HNBUITests.swift; path = ../../../../.Trash/HNBUITests.swift; sourceTree = "<group>"; };
 		229861EF260F895100F7535A /* HNBUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HNBUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229861F2260F895100F7535A /* HNBUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNBUI.h; sourceTree = "<group>"; };
 		229861F3260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		229861F8260F895100F7535A /* HNBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HNBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		229861FD260F895100F7535A /* HNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HNBUITests.swift; sourceTree = "<group>"; };
 		229861FF260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2298620F260F89B800F7535A /* HNBUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HNBUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22986211260F89B800F7535A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,11 +83,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		221B330A263F74C600C7404E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				221B330B263F74C600C7404E /* HNBUI */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		221B330B263F74C600C7404E /* HNBUI */ = {
+			isa = PBXGroup;
+			children = (
+				229861F2260F895100F7535A /* HNBUI.h */,
+				229861F3260F895100F7535A /* Info.plist */,
+				22986247260F8A3000F7535A /* TabBarController.swift */,
+				22986255260FB79D00F7535A /* TabBar.swift */,
+			);
+			path = HNBUI;
+			sourceTree = "<group>";
+		};
+		221B3311263F74CE00C7404E /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				221B3313263F74CE00C7404E /* HNBUITests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		221B3313263F74CE00C7404E /* HNBUITests */ = {
+			isa = PBXGroup;
+			children = (
+				229861FF260F895100F7535A /* Info.plist */,
+				221B3332263F75D700C7404E /* HNBUITests.swift */,
+				221B3314263F74CE00C7404E /* XCTestManifests.swift */,
+			);
+			path = HNBUITests;
+			sourceTree = "<group>";
+		};
 		229861E5260F895100F7535A = {
 			isa = PBXGroup;
 			children = (
-				229861F1260F895100F7535A /* HNBUI */,
-				229861FC260F895100F7535A /* HNBUITests */,
+				221B3300263F74A400C7404E /* Package.swift */,
+				221B3305263F74B000C7404E /* README.md */,
+				221B330A263F74C600C7404E /* Sources */,
+				221B3311263F74CE00C7404E /* Tests */,
 				22986210260F89B800F7535A /* HNBUIDemo */,
 				229861F0260F895100F7535A /* Products */,
 			);
@@ -98,26 +140,6 @@
 				2298620F260F89B800F7535A /* HNBUIDemo.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		229861F1260F895100F7535A /* HNBUI */ = {
-			isa = PBXGroup;
-			children = (
-				229861F2260F895100F7535A /* HNBUI.h */,
-				229861F3260F895100F7535A /* Info.plist */,
-				22986247260F8A3000F7535A /* TabBarController.swift */,
-				22986255260FB79D00F7535A /* TabBar.swift */,
-			);
-			path = HNBUI;
-			sourceTree = "<group>";
-		};
-		229861FC260F895100F7535A /* HNBUITests */ = {
-			isa = PBXGroup;
-			children = (
-				229861FD260F895100F7535A /* HNBUITests.swift */,
-				229861FF260F895100F7535A /* Info.plist */,
-			);
-			path = HNBUITests;
 			sourceTree = "<group>";
 		};
 		22986210260F89B800F7535A /* HNBUIDemo */ = {
@@ -247,6 +269,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				221B3306263F74B000C7404E /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +305,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				229861FE260F895100F7535A /* HNBUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,7 +477,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = HNBUI/Info.plist;
+				INFOPLIST_FILE = Sources/HNBUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -481,7 +503,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = HNBUI/Info.plist;
+				INFOPLIST_FILE = Sources/HNBUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -502,7 +524,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				INFOPLIST_FILE = HNBUITests/Info.plist;
+				INFOPLIST_FILE = Tests/HNBUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -521,7 +543,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				INFOPLIST_FILE = HNBUITests/Info.plist;
+				INFOPLIST_FILE = Tests/HNBUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
