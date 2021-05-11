@@ -34,7 +34,7 @@ public final class TabBar: UIView {
             guard let continuousIndex = continuousIndex else {
                 return nil
             }
-            return items[continuousIndex.roundedInt()]
+            return items.count > 0 ? items[continuousIndex.roundedInt()] : nil
         }
         set {
             guard let item = newValue, let index = items.firstIndex(of: item) else {
@@ -49,8 +49,7 @@ public final class TabBar: UIView {
         didSet(oldValue) {
             guard continuousIndex?.rounded(.toNearestOrAwayFromZero) != oldValue?.rounded(.toNearestOrAwayFromZero),
                   let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
-                  let continuousIndex = continuousIndex
-            else {
+                  let continuousIndex = continuousIndex else {
                 return
             }
             tabBarItems.forEach { tabBarItem in
