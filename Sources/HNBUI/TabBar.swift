@@ -47,9 +47,11 @@ public final class TabBar: UIView {
 
     private var continuousIndex: CGFloat? {
         didSet(oldValue) {
-            guard continuousIndex?.rounded(.toNearestOrAwayFromZero) != oldValue?.rounded(.toNearestOrAwayFromZero),
+            guard continuousIndex?.roundedInt() != oldValue?.roundedInt(),
                   let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
-                  let continuousIndex = continuousIndex else {
+                  let continuousIndex = continuousIndex,
+                  continuousIndex >= 0,
+                  Int(continuousIndex) < tabBarItems.count else {
                 return
             }
             tabBarItems.forEach { tabBarItem in
@@ -157,6 +159,7 @@ fileprivate final class TabBarItemView: UIView {
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.setContentHuggingPriority(.required, for: .horizontal)
         return imageView
     }()
 
@@ -164,6 +167,7 @@ fileprivate final class TabBarItemView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .footnote)
+        label.textAlignment = .center
         return label
     }()
 

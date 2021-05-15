@@ -19,16 +19,20 @@ open class TabBarController: UIViewController {
     private var shouldScrollTabBar = false
 
     public var viewControllers: [UIViewController] = [] {
-        didSet {
+        didSet(oldValue) {
+            oldValue.forEach { viewController in
+                viewController.willMove(toParent: nil)
+                viewController.view.removeFromSuperview()
+                viewController.removeFromParent()
+            }
             tabBar.items = viewControllers.map { viewController in
                 viewController.tabBarItem
             }
             if viewControllers.count > 0 {
                 containerScrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(viewControllers.count), height: containerScrollView.bounds.height)
-                addViewController(atContinuousIndex: 0)
+                addSelectedViewController()
             } else {
                 containerScrollView.contentSize = CGSize(width: 0, height: 0)
-                removeUnselectedViewControllers()
             }
         }
     }
@@ -71,26 +75,19 @@ open class TabBarController: UIViewController {
         containerScrollView.delegate = self
     }
 
-    private func addViewController(atContinuousIndex continuousIndex: CGFloat) {
-        let indices = [Int(ceil(continuousIndex)), Int(floor(continuousIndex))]
-        indices.forEach { index in
-            guard index < viewControllers.count, index >= 0 else { return }
-            addChild(viewControllers[index])
-            viewControllers[index].view.frame.origin.x = view.bounds.width * CGFloat(index)
-            viewControllers[index].view.frame.size = containerScrollView.frame.size
-            containerScrollView.addSubview(viewControllers[index].view)
-            viewControllers[index].didMove(toParent: self)
+    private func addSelectedViewController() {
+        guard let selectedItem = tabBar.selectedItem else {
+            return
         }
-    }
-
-    private func removeUnselectedViewControllers() {
-        children.forEach { viewController in
-            if let selectedItem = tabBar.selectedItem, viewController.tabBarItem == selectedItem {
-                return
+        viewControllers.enumerated().forEach { (index, viewController) in
+            if !children.contains(viewController),
+                viewController.tabBarItem == selectedItem {
+                addChild(viewController)
+                containerScrollView.addSubview(viewController.view)
+                viewController.view.frame.origin.x = view.bounds.width * CGFloat(index)
+                viewController.view.frame.size = containerScrollView.frame.size
+                viewController.didMove(toParent: self)
             }
-            viewController.willMove(toParent: nil)
-            viewController.view.removeFromSuperview()
-            viewController.removeFromParent()
         }
     }
 
@@ -100,7 +97,6 @@ extension TabBarController: TabBarDelegate {
 
     public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem) {
         guard let index = tabBar.items.firstIndex(of: item) else { return }
-        addViewController(atContinuousIndex: CGFloat(index))
         if !shouldScrollTabBar {
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
         }
@@ -122,18 +118,17 @@ extension TabBarController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if shouldScrollTabBar {
-            addViewController(atContinuousIndex: scrollView.contentOffset.x / view.bounds.width)
             tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)), animated: false)
         }
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         shouldScrollTabBar = false
-        removeUnselectedViewControllers()
+        addSelectedViewController()
     }
 
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        removeUnselectedViewControllers()
+        addSelectedViewController()
     }
 
 }
