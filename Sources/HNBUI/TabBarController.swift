@@ -16,18 +16,25 @@ open class TabBarController: UIViewController {
 
     public weak var delegate: TabBarControllerDelegate?
 
-    public var selectedViewController: UIViewController?
-
     private var shouldScrollTabBar = false
 
-    public var selectedIndex: Int? {
-        didSet {
+    public var selectedViewController: UIViewController? {
+        get {
             guard let selectedIndex = selectedIndex else {
-                selectedViewController = nil
-                return
+                return nil
             }
-            selectedViewController = viewControllers[selectedIndex]
+            return viewControllers[selectedIndex]
         }
+    }
+
+    public var selectedIndex: Int? {
+        get {
+            guard let selectedItem = tabBar.selectedItem else {
+                return nil
+            }
+            return tabBar.items.firstIndex(of: selectedItem)
+        }
+        set { }
     }
 
     public var viewControllers: [UIViewController] = [] {
@@ -90,16 +97,15 @@ open class TabBarController: UIViewController {
 
     private func addSelectedViewController() {
         guard let selectedViewController = selectedViewController,
-              let selectedIndex = selectedIndex else {
+              let selectedIndex = selectedIndex,
+              !children.contains(selectedViewController) else {
             return
         }
-        if !children.contains(selectedViewController) {
-            addChild(selectedViewController)
-            containerScrollView.addSubview(selectedViewController.view)
-            selectedViewController.view.frame.origin.x = view.bounds.width * CGFloat(selectedIndex)
-            selectedViewController.view.frame.size = containerScrollView.frame.size
-            selectedViewController.didMove(toParent: self)
-        }
+        addChild(selectedViewController)
+        containerScrollView.addSubview(selectedViewController.view)
+        selectedViewController.view.frame.origin.x = view.bounds.width * CGFloat(selectedIndex)
+        selectedViewController.view.frame.size = containerScrollView.frame.size
+        selectedViewController.didMove(toParent: self)
     }
 
 }
