@@ -16,7 +16,19 @@ open class TabBarController: UIViewController {
 
     public weak var delegate: TabBarControllerDelegate?
 
+    public var selectedViewController: UIViewController?
+
     private var shouldScrollTabBar = false
+
+    public var selectedIndex: Int? {
+        didSet {
+            guard let selectedIndex = selectedIndex else {
+                selectedViewController = nil
+                return
+            }
+            selectedViewController = viewControllers[selectedIndex]
+        }
+    }
 
     public var viewControllers: [UIViewController] = [] {
         didSet(oldValue) {
@@ -33,6 +45,7 @@ open class TabBarController: UIViewController {
                 addSelectedViewController()
             } else {
                 containerScrollView.contentSize = CGSize(width: 0, height: 0)
+                selectedIndex = nil
             }
         }
     }
@@ -76,18 +89,16 @@ open class TabBarController: UIViewController {
     }
 
     private func addSelectedViewController() {
-        guard let selectedItem = tabBar.selectedItem else {
+        guard let selectedViewController = selectedViewController,
+              let selectedIndex = selectedIndex else {
             return
         }
-        viewControllers.enumerated().forEach { (index, viewController) in
-            if !children.contains(viewController),
-                viewController.tabBarItem == selectedItem {
-                addChild(viewController)
-                containerScrollView.addSubview(viewController.view)
-                viewController.view.frame.origin.x = view.bounds.width * CGFloat(index)
-                viewController.view.frame.size = containerScrollView.frame.size
-                viewController.didMove(toParent: self)
-            }
+        if !children.contains(selectedViewController) {
+            addChild(selectedViewController)
+            containerScrollView.addSubview(selectedViewController.view)
+            selectedViewController.view.frame.origin.x = view.bounds.width * CGFloat(selectedIndex)
+            selectedViewController.view.frame.size = containerScrollView.frame.size
+            selectedViewController.didMove(toParent: self)
         }
     }
 
@@ -95,7 +106,8 @@ open class TabBarController: UIViewController {
 
 extension TabBarController: TabBarDelegate {
 
-    public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem) {
+    public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int) {
+        selectedIndex = tabBar.items.firstIndex(of: item)
         guard let index = tabBar.items.firstIndex(of: item) else { return }
         if !shouldScrollTabBar {
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)

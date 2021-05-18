@@ -9,7 +9,7 @@ import UIKit
 
 public protocol TabBarDelegate: AnyObject {
 
-    func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem)
+    func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int)
 
 }
 
@@ -58,7 +58,7 @@ public final class TabBar: UIView {
                 tabBarItem.isSelected = false
             }
             tabBarItems[continuousIndex.roundedInt()].isSelected = true
-            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()])
+            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()], atIndex: continuousIndex.roundedInt())
         }
     }
 
