@@ -23,13 +23,13 @@ public final class TabBar: UIView {
         }
     }
 
-    public var items: [UITabBarItem] = [] {
+    public internal(set) var items: [UITabBarItem] = [] {
         didSet {
             configure()
         }
     }
 
-    public var selectedItem: UITabBarItem? {
+    public internal(set) var selectedItem: UITabBarItem? {
         get {
             guard let continuousIndex = continuousIndex else {
                 return nil
