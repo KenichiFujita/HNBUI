@@ -159,14 +159,14 @@ fileprivate final class TabBarItemView: UIView {
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .footnote)
+        label.font = .preferredFont(forTextStyle: .callout).withTraits(traits: .traitBold)
         label.textAlignment = .center
         return label
     }()
@@ -190,13 +190,15 @@ fileprivate final class TabBarItemView: UIView {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            itemImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            itemImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            heightAnchor.constraint(equalToConstant: 44),
+            itemImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            itemImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: layoutMargins.left),
+            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
             itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -(layoutMargins.left)),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right))
+            itemImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right)),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 
@@ -221,6 +223,21 @@ fileprivate extension CGFloat {
 
     func roundedInt() -> Int {
         return Int(self.rounded(.toNearestOrAwayFromZero))
+    }
+
+}
+
+fileprivate extension UIFont {
+
+    func withTraits(traits:UIFontDescriptor.SymbolicTraits) -> UIFont {
+        guard let descriptor = fontDescriptor.withSymbolicTraits(traits) else {
+            return UIFont()
+        }
+        return UIFont(descriptor: descriptor, size: 0)
+    }
+
+    func bold() -> UIFont {
+        return withTraits(traits: .traitBold)
     }
 
 }
