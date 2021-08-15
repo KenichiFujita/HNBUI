@@ -17,6 +17,12 @@ public final class TabBar: UIView {
 
     public weak var delegate: TabBarDelegate?
 
+    public override var tintColor: UIColor! {
+        didSet {
+            underBarView.backgroundColor = tintColor
+        }
+    }
+
     public var barTintColor: UIColor? {
         didSet {
             self.backgroundColor = barTintColor
@@ -29,36 +35,34 @@ public final class TabBar: UIView {
         }
     }
 
-    public internal(set) var selectedItem: UITabBarItem? {
-        get {
-            guard let continuousIndex = continuousIndex else {
-                return nil
-            }
-            return items.count > 0 ? items[continuousIndex.roundedInt()] : nil
-        }
-        set {
-            guard let item = newValue, let index = items.firstIndex(of: item) else {
+    public private(set) var selectedItem: UITabBarItem? {
+        didSet {
+            guard let selectedItem = selectedItem,
+                  let index = items.firstIndex(of: selectedItem),
+                  let tabBarItemViews = hStack.arrangedSubviews as? [TabBarItemView]
+             else {
                 continuousIndex = nil
                 return
             }
-            setContinuousIndex(CGFloat(index), animated: true)
+            tabBarItemViews.forEach { tabBarItemView in
+                tabBarItemView.isSelected = false
+            }
+            tabBarItemViews[index].isSelected = true
+            delegate?.tabBar(self, didSelectItem: selectedItem, atIndex: index)
         }
     }
 
     private var continuousIndex: CGFloat? {
         didSet(oldValue) {
-            guard continuousIndex?.roundedInt() != oldValue?.roundedInt(),
-                  let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
-                  let continuousIndex = continuousIndex,
+            guard let continuousIndex = continuousIndex,
                   continuousIndex >= 0,
-                  Int(continuousIndex) < tabBarItems.count else {
+                  Int(continuousIndex) < hStack.arrangedSubviews.count,
+                  continuousIndex.truncatingRemainder(dividingBy: 1) == 0.0,
+                  selectedItem != items[Int(continuousIndex)]
+            else {
                 return
             }
-            tabBarItems.forEach { tabBarItem in
-                tabBarItem.isSelected = false
-            }
-            tabBarItems[continuousIndex.roundedInt()].isSelected = true
-            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()], atIndex: continuousIndex.roundedInt())
+            selectedItem = items[Int(continuousIndex)]
         }
     }
 
@@ -70,6 +74,13 @@ public final class TabBar: UIView {
         return scrollView
     }()
 
+    private lazy var underBarView: UIView = {
+        let underBarView = UIView()
+        underBarView.translatesAutoresizingMaskIntoConstraints = false
+        underBarView.backgroundColor = tintColor
+        return underBarView
+    }()
+
     private let hStack: UIStackView = {
         let hStack = UIStackView()
         hStack.translatesAutoresizingMaskIntoConstraints = false
@@ -79,38 +90,52 @@ public final class TabBar: UIView {
         return hStack
     }()
 
+    private lazy var underBarViewLeadingAnchorConstraint: NSLayoutConstraint? = {
+        let underBarViewLeadingAnchorConstraint = underBarView.leadingAnchor.constraint(equalTo: hStack.leadingAnchor)
+        underBarViewLeadingAnchorConstraint.isActive = true
+        return underBarViewLeadingAnchorConstraint
+    }()
+
+    private lazy var underBarViewWidthAnchorConstraint: NSLayoutConstraint? = {
+        let underBarViewWidthAnchorConstraint = underBarView.widthAnchor.constraint(equalToConstant: 0)
+        underBarViewWidthAnchorConstraint.isActive = true
+        return underBarViewWidthAnchorConstraint
+    }()
+
+    private var leftTabBarItemView: TabBarItemView? {
+        guard let continuousIndex = continuousIndex else { return nil }
+        return hStack.arrangedSubviews[Int(continuousIndex)] as? TabBarItemView
+    }
+
+    private var rightTabBarItemView: TabBarItemView? {
+        guard let continuousIndex = continuousIndex else { return nil }
+        return hStack.arrangedSubviews[min(Int(continuousIndex) + 1, items.count - 1)] as? TabBarItemView
+    }
+
     internal init() {
         super.init(frame: .zero)
 
         backgroundColor = .systemBackground
         addSubview(scrollView)
         scrollView.addSubview(hStack)
+        scrollView.addSubview(underBarView)
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: self.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            hStack.topAnchor.constraint(equalTo: self.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            hStack.topAnchor.constraint(equalTo: topAnchor),
             hStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            hStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            hStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             hStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            underBarView.topAnchor.constraint(equalTo: hStack.bottomAnchor, constant: -3),
+            underBarView.bottomAnchor.constraint(equalTo: hStack.bottomAnchor)
         ])
-
     }
 
     internal required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    internal func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
-        self.continuousIndex = continuousIndex
-        scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
-    }
-
-    private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
-        guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
-        strongSelf.selectedItem = strongSelf.items[index]
     }
 
     private func configure() {
@@ -123,8 +148,21 @@ public final class TabBar: UIView {
             hStack.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
-            selectedItem = items[0]
+            layoutIfNeeded()
+            setContinuousIndex(0, animated: false)
         }
+    }
+
+    private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
+        guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
+        strongSelf.setContinuousIndex(CGFloat(index), animated: true)
+    }
+
+    internal func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
+        self.continuousIndex = continuousIndex
+        scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
+        moveUnderBarView(toContinuousIndex: continuousIndex, animated: animated)
+        transitTabBarItemTintColor(byContinuousIndex: continuousIndex)
     }
 
     private func contentOffsetForContinuousIndex(_ continuousIndex: CGFloat) -> CGPoint {
@@ -137,107 +175,30 @@ public final class TabBar: UIView {
         guard index >= 0, index < items.count else {
             return 0
         }
-        let offset = hStack.arrangedSubviews[index].center.x + scrollView.layoutMargins.left - (bounds.width / 2)
+        let offset = hStack.arrangedSubviews[index].center.x - (bounds.width / 2)
         let minimumOffset: CGFloat = 0
         let maximumOffset = hStack.bounds.width - bounds.width
         return min(max(minimumOffset, offset), maximumOffset)
     }
 
-}
-
-
-fileprivate final class TabBarItemView: UIView {
-
-    private let item: UITabBarItem
-
-    fileprivate var isSelected: Bool = false {
-        didSet {
-            updateColors()
+    private func moveUnderBarView(toContinuousIndex continuousIndex: CGFloat, animated: Bool) {
+        guard let leftTabBarItemView = leftTabBarItemView, let rightTabBarItemView = rightTabBarItemView else { return }
+        let distanceBetweenItems =  (rightTabBarItemView.frame.origin.x - leftTabBarItemView.frame.origin.x) * continuousIndex.truncatingRemainder(dividingBy: 1)
+        let widthDifference = (rightTabBarItemView.bounds.width - leftTabBarItemView.bounds.width) * continuousIndex.truncatingRemainder(dividingBy: 1)
+        underBarViewLeadingAnchorConstraint?.constant = leftTabBarItemView.frame.origin.x + distanceBetweenItems
+        underBarViewWidthAnchorConstraint?.constant = leftTabBarItemView.bounds.width + widthDifference
+        if animated {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {[weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.layoutIfNeeded()
+            })
         }
     }
 
-    private let itemImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .callout).withTraits(traits: .traitBold)
-        label.textAlignment = .center
-        return label
-    }()
-
-    private lazy var tapGesture: UITapGestureRecognizer = {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        return tapGesture
-    }()
-
-    fileprivate init(item: UITabBarItem) {
-        self.item = item
-        super.init(frame: .zero)
-
-        addGestureRecognizer(tapGesture)
-        translatesAutoresizingMaskIntoConstraints = false
-        itemImageView.image = item.image
-        titleLabel.text = item.title
-        updateColors()
-
-        addSubview(itemImageView)
-        addSubview(titleLabel)
-
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 44),
-            itemImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            itemImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: layoutMargins.left),
-            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
-            itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -(layoutMargins.left)),
-            itemImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right)),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    fileprivate var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
-
-    @objc private func didTap() {
-        didTapTabBarItem(item)
-    }
-
-    private func updateColors() {
-        titleLabel.textColor = isSelected ? tintColor : .secondaryLabel
-        itemImageView.tintColor = isSelected ? tintColor : .secondaryLabel
-    }
-
-}
-
-fileprivate extension CGFloat {
-
-    func roundedInt() -> Int {
-        return Int(self.rounded(.toNearestOrAwayFromZero))
-    }
-
-}
-
-fileprivate extension UIFont {
-
-    func withTraits(traits:UIFontDescriptor.SymbolicTraits) -> UIFont {
-        guard let descriptor = fontDescriptor.withSymbolicTraits(traits) else {
-            return UIFont()
-        }
-        return UIFont(descriptor: descriptor, size: 0)
-    }
-
-    func bold() -> UIFont {
-        return withTraits(traits: .traitBold)
+    private func transitTabBarItemTintColor(byContinuousIndex continuousIndex: CGFloat) {
+        guard let leftTabBarItemView = leftTabBarItemView, let rightTabBarItemView = rightTabBarItemView else { return }
+        rightTabBarItemView.transitColor(withRatio: 1 - continuousIndex.truncatingRemainder(dividingBy: 1))
+        leftTabBarItemView.transitColor(withRatio: continuousIndex.truncatingRemainder(dividingBy: 1))
     }
 
 }

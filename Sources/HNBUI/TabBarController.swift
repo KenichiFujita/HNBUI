@@ -26,10 +26,10 @@ open class TabBarController: UIViewController {
             return viewControllers[selectedIndex]
         }
         set {
-            guard let newValue = newValue, viewControllers.contains(newValue) else {
+            guard let newValue = newValue, let index = viewControllers.firstIndex(of: newValue) else {
                 fatalError("Only a view controller in the tab bar controller's list of view controllers can be selected.")
             }
-            tabBar.selectedItem = newValue.tabBarItem
+            tabBar.setContinuousIndex(CGFloat(index), animated: true)
         }
     }
 
@@ -46,7 +46,7 @@ open class TabBarController: UIViewController {
                   newValue >= 0 else {
                 return
             }
-            tabBar.selectedItem = viewControllers[newValue].tabBarItem
+            tabBar.setContinuousIndex(CGFloat(newValue), animated: true)
         }
     }
 
@@ -126,8 +126,6 @@ open class TabBarController: UIViewController {
 extension TabBarController: TabBarDelegate {
 
     public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int) {
-        selectedIndex = tabBar.items.firstIndex(of: item)
-        guard let index = tabBar.items.firstIndex(of: item) else { return }
         if !shouldScrollTabBar {
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
         }
@@ -160,7 +158,6 @@ extension TabBarController: UIScrollViewDelegate {
 
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         addSelectedViewController()
-        selectedIndex = nil
     }
 
 }

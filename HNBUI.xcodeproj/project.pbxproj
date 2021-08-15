@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		221B3306263F74B000C7404E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 221B3305263F74B000C7404E /* README.md */; };
+		221BC1DE26C9BF6F00E492C9 /* TabBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */; };
+		221BC1E026C9BFA200E492C9 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DF26C9BFA200E492C9 /* Extensions.swift */; };
 		229861F9260F895100F7535A /* HNBUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229861EF260F895100F7535A /* HNBUI.framework */; };
 		22986200260F895100F7535A /* HNBUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 229861F2260F895100F7535A /* HNBUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22986212260F89B800F7535A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986211260F89B800F7535A /* AppDelegate.swift */; };
@@ -41,6 +43,8 @@
 		221B3305263F74B000C7404E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		221B3314263F74CE00C7404E /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		221B3332263F75D700C7404E /* HNBUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HNBUITests.swift; path = ../../../../.Trash/HNBUITests.swift; sourceTree = "<group>"; };
+		221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemView.swift; sourceTree = "<group>"; };
+		221BC1DF26C9BFA200E492C9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		229861EF260F895100F7535A /* HNBUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HNBUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229861F2260F895100F7535A /* HNBUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNBUI.h; sourceTree = "<group>"; };
 		229861F3260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 				229861F3260F895100F7535A /* Info.plist */,
 				22986247260F8A3000F7535A /* TabBarController.swift */,
 				22986255260FB79D00F7535A /* TabBar.swift */,
+				221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */,
+				221BC1DF26C9BFA200E492C9 /* Extensions.swift */,
 			);
 			path = HNBUI;
 			sourceTree = "<group>";
@@ -298,6 +304,8 @@
 			files = (
 				22986256260FB79D00F7535A /* TabBar.swift in Sources */,
 				22986248260F8A3000F7535A /* TabBarController.swift in Sources */,
+				221BC1DE26C9BF6F00E492C9 /* TabBarItemView.swift in Sources */,
+				221BC1E026C9BFA200E492C9 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
