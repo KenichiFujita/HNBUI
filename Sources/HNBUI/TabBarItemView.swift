@@ -41,6 +41,16 @@ internal final class TabBarItemView: UIView {
         return label
     }()
 
+    private let hStack: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        stackView.spacing = 8
+        return stackView
+    }()
+
     private lazy var tapGesture: UITapGestureRecognizer = {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         return tapGesture
@@ -55,19 +65,17 @@ internal final class TabBarItemView: UIView {
         itemImageView.image = item.image
         titleLabel.text = item.title
 
-        addSubview(itemImageView)
-        addSubview(titleLabel)
+        if item.image != nil {
+            hStack.addArrangedSubview(itemImageView)
+        }
+        hStack.addArrangedSubview(titleLabel)
+        addSubview(hStack)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 44),
-            itemImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            itemImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: layoutMargins.left),
-            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
-            itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -(layoutMargins.left/2)),
-            itemImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right)),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            hStack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            hStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: directionalLayoutMargins.leading * 2),
+            hStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -directionalLayoutMargins.trailing * 2),
+            hStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
         ])
     }
 

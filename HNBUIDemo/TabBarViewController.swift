@@ -17,19 +17,19 @@ class TabBarViewController: TabBarController {
 
         viewControllers = [
             viewController(tabBarItemTitle: "Top Stories",
-                           tabBarItemImage: UIImage(systemName: "list.number"),
+                           tabBarItemImage: nil,
                            backgroundColor: .blue),
             viewController(tabBarItemTitle: "Ask HN",
-                           tabBarItemImage: UIImage(systemName: "questionmark.circle"),
+                           tabBarItemImage: nil,
                            backgroundColor: .brown),
             viewController(tabBarItemTitle: "Show HN",
-                           tabBarItemImage: UIImage(systemName: "globe"),
+                           tabBarItemImage: nil,
                            backgroundColor: .cyan),
             viewController(tabBarItemTitle: "Search",
-                           tabBarItemImage: UIImage(systemName: "magnifyingglass"),
+                           tabBarItemImage: nil,
                            backgroundColor: .darkGray),
             viewController(tabBarItemTitle: "Favorite",
-                           tabBarItemImage: UIImage(systemName: "star"),
+                           tabBarItemImage: nil,
                            backgroundColor: .green)
         ]
     }

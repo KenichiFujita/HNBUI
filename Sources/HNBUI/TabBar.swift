@@ -35,7 +35,7 @@ public final class TabBar: UIView {
         }
     }
 
-    public private(set) var selectedItem: UITabBarItem? {
+    internal private(set) var selectedItem: UITabBarItem? {
         didSet {
             guard let selectedItem = selectedItem,
                   let index = items.firstIndex(of: selectedItem),
@@ -53,7 +53,7 @@ public final class TabBar: UIView {
     }
 
     private var continuousIndex: CGFloat? {
-        didSet(oldValue) {
+        didSet {
             guard let continuousIndex = continuousIndex,
                   continuousIndex >= 0,
                   Int(continuousIndex) < hStack.arrangedSubviews.count,
@@ -138,6 +138,10 @@ public final class TabBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    internal func setContinuousIndex(_ continuousIndex: CGFloat) {
+        setContinuousIndex(continuousIndex, animated: false)
+    }
+
     private func configure() {
         hStack.subviews.forEach { view in
             view.removeFromSuperview()
@@ -158,7 +162,7 @@ public final class TabBar: UIView {
         strongSelf.setContinuousIndex(CGFloat(index), animated: true)
     }
 
-    internal func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
+     private func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
         self.continuousIndex = continuousIndex
         scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
         moveUnderBarView(toContinuousIndex: continuousIndex, animated: animated)
@@ -185,8 +189,8 @@ public final class TabBar: UIView {
         guard let leftTabBarItemView = leftTabBarItemView, let rightTabBarItemView = rightTabBarItemView else { return }
         let distanceBetweenItems =  (rightTabBarItemView.frame.origin.x - leftTabBarItemView.frame.origin.x) * continuousIndex.truncatingRemainder(dividingBy: 1)
         let widthDifference = (rightTabBarItemView.bounds.width - leftTabBarItemView.bounds.width) * continuousIndex.truncatingRemainder(dividingBy: 1)
-        underBarViewLeadingAnchorConstraint?.constant = leftTabBarItemView.frame.origin.x + distanceBetweenItems
-        underBarViewWidthAnchorConstraint?.constant = leftTabBarItemView.bounds.width + widthDifference
+        underBarViewLeadingAnchorConstraint?.constant = leftTabBarItemView.frame.origin.x + distanceBetweenItems + directionalLayoutMargins.leading
+        underBarViewWidthAnchorConstraint?.constant = leftTabBarItemView.bounds.width + widthDifference - directionalLayoutMargins.leading * 2
         if animated {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {[weak self] in
                 guard let strongSelf = self else { return }
