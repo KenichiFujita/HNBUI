@@ -39,7 +39,7 @@ public final class TabBar: UIView {
         didSet {
             guard let selectedItem = selectedItem,
                   let index = items.firstIndex(of: selectedItem),
-                  let tabBarItemViews = hStack.arrangedSubviews as? [TabBarItemView]
+                  let tabBarItemViews = hStackView.arrangedSubviews as? [TabBarItemView]
              else {
                 continuousIndex = nil
                 return
@@ -56,9 +56,8 @@ public final class TabBar: UIView {
         didSet {
             guard let continuousIndex = continuousIndex,
                   continuousIndex >= 0,
-                  Int(continuousIndex) < hStack.arrangedSubviews.count,
-                  continuousIndex.truncatingRemainder(dividingBy: 1) == 0.0,
-                  selectedItem != items[Int(continuousIndex)]
+                  Int(continuousIndex) < hStackView.arrangedSubviews.count,
+                  continuousIndex.truncatingRemainder(dividingBy: 1) == 0.0
             else {
                 return
             }
@@ -81,7 +80,7 @@ public final class TabBar: UIView {
         return underBarView
     }()
 
-    private let hStack: UIStackView = {
+    private let hStackView: UIStackView = {
         let hStack = UIStackView()
         hStack.translatesAutoresizingMaskIntoConstraints = false
         hStack.axis = .horizontal
@@ -91,7 +90,7 @@ public final class TabBar: UIView {
     }()
 
     private lazy var underBarViewLeadingAnchorConstraint: NSLayoutConstraint? = {
-        let underBarViewLeadingAnchorConstraint = underBarView.leadingAnchor.constraint(equalTo: hStack.leadingAnchor)
+        let underBarViewLeadingAnchorConstraint = underBarView.leadingAnchor.constraint(equalTo: hStackView.leadingAnchor)
         underBarViewLeadingAnchorConstraint.isActive = true
         return underBarViewLeadingAnchorConstraint
     }()
@@ -104,12 +103,12 @@ public final class TabBar: UIView {
 
     private var leftTabBarItemView: TabBarItemView? {
         guard let continuousIndex = continuousIndex else { return nil }
-        return hStack.arrangedSubviews[Int(continuousIndex)] as? TabBarItemView
+        return hStackView.arrangedSubviews[Int(continuousIndex)] as? TabBarItemView
     }
 
     private var rightTabBarItemView: TabBarItemView? {
         guard let continuousIndex = continuousIndex else { return nil }
-        return hStack.arrangedSubviews[min(Int(continuousIndex) + 1, items.count - 1)] as? TabBarItemView
+        return hStackView.arrangedSubviews[min(Int(continuousIndex) + 1, items.count - 1)] as? TabBarItemView
     }
 
     internal init() {
@@ -117,7 +116,7 @@ public final class TabBar: UIView {
 
         backgroundColor = .systemBackground
         addSubview(scrollView)
-        scrollView.addSubview(hStack)
+        scrollView.addSubview(hStackView)
         scrollView.addSubview(underBarView)
 
         NSLayoutConstraint.activate([
@@ -125,12 +124,12 @@ public final class TabBar: UIView {
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            hStack.topAnchor.constraint(equalTo: topAnchor),
-            hStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            hStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            hStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            underBarView.topAnchor.constraint(equalTo: hStack.bottomAnchor, constant: -3),
-            underBarView.bottomAnchor.constraint(equalTo: hStack.bottomAnchor)
+            hStackView.topAnchor.constraint(equalTo: topAnchor),
+            hStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            hStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            hStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            underBarView.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: -3),
+            underBarView.bottomAnchor.constraint(equalTo: hStackView.bottomAnchor)
         ])
     }
 
@@ -143,13 +142,13 @@ public final class TabBar: UIView {
     }
 
     private func configure() {
-        hStack.subviews.forEach { view in
+        hStackView.subviews.forEach { view in
             view.removeFromSuperview()
         }
         items.forEach { item in
             let tabBarItem = TabBarItemView(item: item)
             tabBarItem.didTapTabBarItem = didTapTabBarItemCallback
-            hStack.addArrangedSubview(tabBarItem)
+            hStackView.addArrangedSubview(tabBarItem)
         }
         if items.count > 0 {
             layoutIfNeeded()
@@ -163,6 +162,7 @@ public final class TabBar: UIView {
     }
 
      private func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
+        guard continuousIndex >= 0, Int(continuousIndex) < hStackView.arrangedSubviews.count else { return }
         self.continuousIndex = continuousIndex
         scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
         moveUnderBarView(toContinuousIndex: continuousIndex, animated: animated)
@@ -179,9 +179,9 @@ public final class TabBar: UIView {
         guard index >= 0, index < items.count else {
             return 0
         }
-        let offset = hStack.arrangedSubviews[index].center.x - (bounds.width / 2)
+        let offset = hStackView.arrangedSubviews[index].center.x - (bounds.width / 2)
         let minimumOffset: CGFloat = 0
-        let maximumOffset = hStack.bounds.width - bounds.width
+        let maximumOffset = hStackView.bounds.width - bounds.width
         return min(max(minimumOffset, offset), maximumOffset)
     }
 

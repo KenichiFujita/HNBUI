@@ -41,7 +41,7 @@ internal final class TabBarItemView: UIView {
         return label
     }()
 
-    private let hStack: UIStackView = {
+    private let hStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
@@ -66,16 +66,16 @@ internal final class TabBarItemView: UIView {
         titleLabel.text = item.title
 
         if item.image != nil {
-            hStack.addArrangedSubview(itemImageView)
+            hStackView.addArrangedSubview(itemImageView)
         }
-        hStack.addArrangedSubview(titleLabel)
-        addSubview(hStack)
+        hStackView.addArrangedSubview(titleLabel)
+        addSubview(hStackView)
 
         NSLayoutConstraint.activate([
-            hStack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            hStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: directionalLayoutMargins.leading * 2),
-            hStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -directionalLayoutMargins.trailing * 2),
-            hStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            hStackView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            hStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: directionalLayoutMargins.leading * 2),
+            hStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -directionalLayoutMargins.trailing * 2),
+            hStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
         ])
     }
 

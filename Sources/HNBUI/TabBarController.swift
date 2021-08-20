@@ -34,15 +34,17 @@ open class TabBarController: UIViewController {
     }
 
     public var selectedIndex: Int? {
-        didSet {
+        didSet(oldValue) {
             guard let selectedIndex = selectedIndex,
                   selectedIndex < viewControllers.count,
                   selectedIndex >= 0,
+                  selectedIndex != oldValue,
                   let selectedItem = tabBar.selectedItem
             else {
                 return
             }
             shouldScrollTabBar = selectedIndex == tabBar.items.firstIndex(of: selectedItem) ? false : true
+            containerScrollView.isScrollEnabled = shouldScrollTabBar
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(selectedIndex), y: 0), animated: true)
         }
     }
@@ -57,6 +59,7 @@ open class TabBarController: UIViewController {
             tabBar.items = viewControllers.map { viewController in
                 viewController.tabBarItem
             }
+            containerScrollView.isScrollEnabled = true
             if viewControllers.count > 0 {
                 containerScrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(viewControllers.count), height: containerScrollView.bounds.height)
                 addSelectedViewController()
@@ -108,7 +111,8 @@ open class TabBarController: UIViewController {
     private func addSelectedViewController() {
         guard let selectedViewController = selectedViewController,
               let selectedIndex = selectedIndex,
-              !children.contains(selectedViewController) else {
+              !children.contains(selectedViewController)
+        else {
             return
         }
         addChild(selectedViewController)
@@ -142,16 +146,18 @@ extension TabBarController: UIScrollViewDelegate {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if shouldScrollTabBar {
-            tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)))
+            tabBar.setContinuousIndex(scrollView.contentOffset.x / view.bounds.width)
         }
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         addSelectedViewController()
+        containerScrollView.isScrollEnabled = true
     }
 
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         addSelectedViewController()
+        containerScrollView.isScrollEnabled = true
     }
 
 }
