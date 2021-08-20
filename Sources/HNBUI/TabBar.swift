@@ -9,7 +9,7 @@ import UIKit
 
 public protocol TabBarDelegate: AnyObject {
 
-    func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem)
+    func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int)
 
 }
 
@@ -23,18 +23,18 @@ public final class TabBar: UIView {
         }
     }
 
-    public var items: [UITabBarItem] = [] {
+    public internal(set) var items: [UITabBarItem] = [] {
         didSet {
             configure()
         }
     }
 
-    public var selectedItem: UITabBarItem? {
+    public internal(set) var selectedItem: UITabBarItem? {
         get {
             guard let continuousIndex = continuousIndex else {
                 return nil
             }
-            return items[continuousIndex.roundedInt()]
+            return items.count > 0 ? items[continuousIndex.roundedInt()] : nil
         }
         set {
             guard let item = newValue, let index = items.firstIndex(of: item) else {
@@ -47,17 +47,18 @@ public final class TabBar: UIView {
 
     private var continuousIndex: CGFloat? {
         didSet(oldValue) {
-            guard continuousIndex?.rounded(.toNearestOrAwayFromZero) != oldValue?.rounded(.toNearestOrAwayFromZero),
+            guard continuousIndex?.roundedInt() != oldValue?.roundedInt(),
                   let tabBarItems = hStack.arrangedSubviews as? [TabBarItemView],
-                  let continuousIndex = continuousIndex
-            else {
+                  let continuousIndex = continuousIndex,
+                  continuousIndex >= 0,
+                  Int(continuousIndex) < tabBarItems.count else {
                 return
             }
             tabBarItems.forEach { tabBarItem in
                 tabBarItem.isSelected = false
             }
             tabBarItems[continuousIndex.roundedInt()].isSelected = true
-            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()])
+            delegate?.tabBar(self, didSelectItem: items[continuousIndex.roundedInt()], atIndex: continuousIndex.roundedInt())
         }
     }
 
@@ -158,13 +159,15 @@ fileprivate final class TabBarItemView: UIView {
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .footnote)
+        label.font = .preferredFont(forTextStyle: .callout).withTraits(traits: .traitBold)
+        label.textAlignment = .center
         return label
     }()
 
@@ -187,13 +190,15 @@ fileprivate final class TabBarItemView: UIView {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            itemImageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            itemImageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            heightAnchor.constraint(equalToConstant: 44),
+            itemImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            itemImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             itemImageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: layoutMargins.left),
+            itemImageView.widthAnchor.constraint(equalTo: itemImageView.heightAnchor),
             itemImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -(layoutMargins.left)),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right))
+            itemImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -(layoutMargins.right)),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 
@@ -218,6 +223,21 @@ fileprivate extension CGFloat {
 
     func roundedInt() -> Int {
         return Int(self.rounded(.toNearestOrAwayFromZero))
+    }
+
+}
+
+fileprivate extension UIFont {
+
+    func withTraits(traits:UIFontDescriptor.SymbolicTraits) -> UIFont {
+        guard let descriptor = fontDescriptor.withSymbolicTraits(traits) else {
+            return UIFont()
+        }
+        return UIFont(descriptor: descriptor, size: 0)
+    }
+
+    func bold() -> UIFont {
+        return withTraits(traits: .traitBold)
     }
 
 }

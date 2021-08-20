@@ -18,29 +18,54 @@ open class TabBarController: UIViewController {
 
     private var shouldScrollTabBar = false
 
-    public var viewControllers: [UIViewController]? {
-        didSet {
-            guard let viewControllers = viewControllers else {
-                containerScrollView.contentSize = CGSize(width: 0, height: 0)
-                containerScrollView.subviews.forEach { subview in
-                    subview.removeFromSuperview()
-                }
-                children.forEach { childViewController in
-                    childViewController.willMove(toParent: nil)
-                    childViewController.removeFromParent()
-                }
+    public var selectedViewController: UIViewController? {
+        get {
+            guard let selectedIndex = selectedIndex else {
+                return nil
+            }
+            return viewControllers[selectedIndex]
+        }
+        set {
+            guard let newValue = newValue, viewControllers.contains(newValue) else {
+                fatalError("Only a view controller in the tab bar controller's list of view controllers can be selected.")
+            }
+            tabBar.selectedItem = newValue.tabBarItem
+        }
+    }
+
+    public var selectedIndex: Int? {
+        get {
+            guard let selectedItem = tabBar.selectedItem else {
+                return nil
+            }
+            return tabBar.items.firstIndex(of: selectedItem)
+        }
+        set {
+            guard let newValue = newValue,
+                  newValue < viewControllers.count,
+                  newValue >= 0 else {
                 return
+            }
+            tabBar.selectedItem = viewControllers[newValue].tabBarItem
+        }
+    }
+
+    public var viewControllers: [UIViewController] = [] {
+        didSet(oldValue) {
+            oldValue.forEach { viewController in
+                viewController.willMove(toParent: nil)
+                viewController.view.removeFromSuperview()
+                viewController.removeFromParent()
             }
             tabBar.items = viewControllers.map { viewController in
                 viewController.tabBarItem
             }
-            containerScrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(viewControllers.count), height: containerScrollView.bounds.height)
-            viewControllers.enumerated().forEach { (index, viewController) in
-                addChild(viewController)
-                containerScrollView.addSubview(viewController.view)
-                viewController.view.frame = containerScrollView.bounds
-                viewController.view.frame.origin.x = view.bounds.width * CGFloat(index)
-                viewController.didMove(toParent: self)
+            if viewControllers.count > 0 {
+                containerScrollView.contentSize = CGSize(width: view.bounds.width * CGFloat(viewControllers.count), height: containerScrollView.bounds.height)
+                addSelectedViewController()
+            } else {
+                containerScrollView.contentSize = CGSize(width: 0, height: 0)
+                selectedIndex = nil
             }
         }
     }
@@ -72,7 +97,7 @@ open class TabBarController: UIViewController {
             containerScrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
             containerScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -83,16 +108,26 @@ open class TabBarController: UIViewController {
         containerScrollView.delegate = self
     }
 
+    private func addSelectedViewController() {
+        guard let selectedViewController = selectedViewController,
+              let selectedIndex = selectedIndex,
+              !children.contains(selectedViewController) else {
+            return
+        }
+        addChild(selectedViewController)
+        containerScrollView.addSubview(selectedViewController.view)
+        selectedViewController.view.frame.origin.x = view.bounds.width * CGFloat(selectedIndex)
+        selectedViewController.view.frame.size = containerScrollView.frame.size
+        selectedViewController.didMove(toParent: self)
+    }
+
 }
 
 extension TabBarController: TabBarDelegate {
 
-    public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem) {
-        guard let viewControllers = viewControllers,
-              let index = tabBar.items.firstIndex(of: item)
-        else {
-            return
-        }
+    public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int) {
+        selectedIndex = tabBar.items.firstIndex(of: item)
+        guard let index = tabBar.items.firstIndex(of: item) else { return }
         if !shouldScrollTabBar {
             containerScrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(index), y: 0), animated: true)
         }
@@ -113,12 +148,19 @@ extension TabBarController: UIScrollViewDelegate {
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldScrollTabBar, let viewControllers = viewControllers else { return }
-        tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)), animated: false)
+        if shouldScrollTabBar {
+            tabBar.setContinuousIndex(min(max(0, scrollView.contentOffset.x / view.bounds.width), CGFloat(viewControllers.count - 1)), animated: false)
+        }
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         shouldScrollTabBar = false
+        addSelectedViewController()
+    }
+
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        addSelectedViewController()
+        selectedIndex = nil
     }
 
 }
