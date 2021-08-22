@@ -25,7 +25,8 @@ public final class TabBar: UIView {
 
     public var barTintColor: UIColor? {
         didSet {
-            self.backgroundColor = barTintColor
+            guard let barTintColor = barTintColor else { return }
+            didChangeBarTintColor(barTintColor)
         }
     }
 
@@ -51,6 +52,8 @@ public final class TabBar: UIView {
             delegate?.tabBar(self, didSelectItem: selectedItem, atIndex: index)
         }
     }
+
+    var didChangeBarTintColor: (UIColor) -> Void = { _ in }
 
     private var continuousIndex: CGFloat? {
         didSet {
