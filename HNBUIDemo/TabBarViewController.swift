@@ -15,10 +15,13 @@ class TabBarViewController: TabBarController {
 
         view.backgroundColor = .systemBackground
 
+        let topStoriesViewController = ViewController(tabBarItemTitle: "Top Stories",
+                                                      tabBarItemImage: nil,
+                                                      backgroundColor: .blue)
+        
+
         viewControllers = [
-            viewController(tabBarItemTitle: "Top Stories",
-                           tabBarItemImage: nil,
-                           backgroundColor: .blue),
+            topStoriesViewController,
             viewController(tabBarItemTitle: "Ask HN",
                            tabBarItemImage: nil,
                            backgroundColor: .brown),

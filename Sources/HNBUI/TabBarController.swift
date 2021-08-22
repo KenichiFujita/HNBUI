@@ -73,6 +73,7 @@ open class TabBarController: UIViewController {
     public let tabBar: TabBar = {
         let tabBar = TabBar()
         tabBar.translatesAutoresizingMaskIntoConstraints = false
+        tabBar.backgroundColor = .clear
         return tabBar
     }()
 
@@ -87,14 +88,14 @@ open class TabBarController: UIViewController {
     open override func loadView() {
         super.loadView()
 
-        view.addSubview(tabBar)
         view.addSubview(containerScrollView)
+        view.addSubview(tabBar)
 
         NSLayoutConstraint.activate([
             tabBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tabBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerScrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
+            containerScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             containerScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -115,6 +116,7 @@ open class TabBarController: UIViewController {
         else {
             return
         }
+        selectedViewController.additionalSafeAreaInsets.top = tabBar.bounds.height
         addChild(selectedViewController)
         containerScrollView.addSubview(selectedViewController.view)
         selectedViewController.view.frame.origin.x = view.bounds.width * CGFloat(selectedIndex)
