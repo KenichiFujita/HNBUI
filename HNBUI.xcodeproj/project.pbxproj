@@ -10,6 +10,7 @@
 		221B3306263F74B000C7404E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 221B3305263F74B000C7404E /* README.md */; };
 		221BC1DE26C9BF6F00E492C9 /* TabBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */; };
 		221BC1E026C9BFA200E492C9 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DF26C9BFA200E492C9 /* Extensions.swift */; };
+		229375AD26D2B24300734577 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229375AC26D2B24300734577 /* ViewController.swift */; };
 		229861F9260F895100F7535A /* HNBUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229861EF260F895100F7535A /* HNBUI.framework */; };
 		22986200260F895100F7535A /* HNBUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 229861F2260F895100F7535A /* HNBUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22986212260F89B800F7535A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986211260F89B800F7535A /* AppDelegate.swift */; };
@@ -45,6 +46,7 @@
 		221B3332263F75D700C7404E /* HNBUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HNBUITests.swift; path = ../../../../.Trash/HNBUITests.swift; sourceTree = "<group>"; };
 		221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemView.swift; sourceTree = "<group>"; };
 		221BC1DF26C9BFA200E492C9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		229375AC26D2B24300734577 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		229861EF260F895100F7535A /* HNBUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HNBUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229861F2260F895100F7535A /* HNBUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNBUI.h; sourceTree = "<group>"; };
 		229861F3260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				22986211260F89B800F7535A /* AppDelegate.swift */,
 				22986213260F89B800F7535A /* SceneDelegate.swift */,
 				22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */,
+				229375AC26D2B24300734577 /* ViewController.swift */,
 				2298621A260F89B900F7535A /* Assets.xcassets */,
 				2298621C260F89B900F7535A /* LaunchScreen.storyboard */,
 				2298621F260F89B900F7535A /* Info.plist */,
@@ -322,6 +325,7 @@
 			files = (
 				22BDE25026271CDD0055E1AA /* TabBarViewController.swift in Sources */,
 				22986212260F89B800F7535A /* AppDelegate.swift in Sources */,
+				229375AD26D2B24300734577 /* ViewController.swift in Sources */,
 				22986214260F89B800F7535A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
