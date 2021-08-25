@@ -77,6 +77,12 @@ open class TabBarController: UIViewController {
         return tabBar
     }()
 
+    private let tabBarBackgroundView: UIView = {
+        let tabBarBackgroundView = UIView()
+        tabBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        return tabBarBackgroundView
+    }()
+
     private let containerScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,13 +94,23 @@ open class TabBarController: UIViewController {
     open override func loadView() {
         super.loadView()
 
+        tabBar.didChangeBarTintColor = { [weak self] color in
+            guard let strongSelf = self else { return }
+            strongSelf.tabBarBackgroundView.backgroundColor = color
+        }
+
+        tabBarBackgroundView.addSubview(tabBar)
         view.addSubview(containerScrollView)
-        view.addSubview(tabBar)
+        view.addSubview(tabBarBackgroundView)
 
         NSLayoutConstraint.activate([
             tabBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tabBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tabBar.leadingAnchor.constraint(equalTo: tabBarBackgroundView.leadingAnchor),
+            tabBar.trailingAnchor.constraint(equalTo: tabBarBackgroundView.trailingAnchor),
+            tabBar.bottomAnchor.constraint(equalTo: tabBarBackgroundView.bottomAnchor),
+            tabBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            tabBarBackgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tabBarBackgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             containerScrollView.topAnchor.constraint(equalTo: view.topAnchor),
             containerScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
