@@ -77,10 +77,10 @@ open class TabBarController: UIViewController {
         return tabBar
     }()
 
-    private let tabBarBackgroundView: UIView = {
-        let tabBarBackgroundView = UIView()
-        tabBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        return tabBarBackgroundView
+    private let tabBarBackgroundView: UIVisualEffectView = {
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        return blurView
     }()
 
     private let containerScrollView: UIScrollView = {
@@ -99,9 +99,9 @@ open class TabBarController: UIViewController {
             strongSelf.tabBarBackgroundView.backgroundColor = color
         }
 
-        tabBarBackgroundView.addSubview(tabBar)
         view.addSubview(containerScrollView)
         view.addSubview(tabBarBackgroundView)
+        view.addSubview(tabBar)
 
         NSLayoutConstraint.activate([
             tabBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
