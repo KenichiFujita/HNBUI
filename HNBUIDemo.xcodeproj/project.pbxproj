@@ -3,148 +3,63 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		221B3306263F74B000C7404E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 221B3305263F74B000C7404E /* README.md */; };
-		221BC1DE26C9BF6F00E492C9 /* TabBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */; };
-		221BC1E026C9BFA200E492C9 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221BC1DF26C9BFA200E492C9 /* Extensions.swift */; };
+		2204D08626DA97100031212A /* HNBUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2204D08526DA97100031212A /* HNBUI */; };
 		229375AD26D2B24300734577 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229375AC26D2B24300734577 /* ViewController.swift */; };
-		229861F9260F895100F7535A /* HNBUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229861EF260F895100F7535A /* HNBUI.framework */; };
-		22986200260F895100F7535A /* HNBUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 229861F2260F895100F7535A /* HNBUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22986212260F89B800F7535A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986211260F89B800F7535A /* AppDelegate.swift */; };
 		22986214260F89B800F7535A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986213260F89B800F7535A /* SceneDelegate.swift */; };
 		2298621B260F89B900F7535A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2298621A260F89B900F7535A /* Assets.xcassets */; };
 		2298621E260F89B900F7535A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2298621C260F89B900F7535A /* LaunchScreen.storyboard */; };
-		22986248260F8A3000F7535A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986247260F8A3000F7535A /* TabBarController.swift */; };
-		22986256260FB79D00F7535A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22986255260FB79D00F7535A /* TabBar.swift */; };
 		22BDE25026271CDD0055E1AA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		229861FA260F895100F7535A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 229861E6260F895100F7535A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 229861EE260F895100F7535A;
-			remoteInfo = HNBUI;
-		};
-		229862B62621F8F500F7535A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 229861E6260F895100F7535A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 229861EE260F895100F7535A;
-			remoteInfo = HNBUI;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		221B3300263F74A400C7404E /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		221B3305263F74B000C7404E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		221B3314263F74CE00C7404E /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
-		221B3332263F75D700C7404E /* HNBUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HNBUITests.swift; path = ../../../../.Trash/HNBUITests.swift; sourceTree = "<group>"; };
-		221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemView.swift; sourceTree = "<group>"; };
-		221BC1DF26C9BFA200E492C9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		2204D08826DA98DE0031212A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = HNBUIDemo/README.md; sourceTree = "<group>"; };
 		229375AC26D2B24300734577 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		229861EF260F895100F7535A /* HNBUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HNBUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		229861F2260F895100F7535A /* HNBUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HNBUI.h; sourceTree = "<group>"; };
-		229861F3260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		229861F8260F895100F7535A /* HNBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HNBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		229861FF260F895100F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2298620F260F89B800F7535A /* HNBUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HNBUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22986211260F89B800F7535A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22986213260F89B800F7535A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2298621A260F89B900F7535A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2298621D260F89B900F7535A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2298621F260F89B900F7535A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		22986247260F8A3000F7535A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		22986255260FB79D00F7535A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		22BDE24F26271CDD0055E1AA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		229861EC260F895100F7535A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		229861F5260F895100F7535A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				229861F9260F895100F7535A /* HNBUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2298620C260F89B800F7535A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2204D08626DA97100031212A /* HNBUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		221B330A263F74C600C7404E /* Sources */ = {
+		2204D08426DA97100031212A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				221B330B263F74C600C7404E /* HNBUI */,
 			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		221B330B263F74C600C7404E /* HNBUI */ = {
-			isa = PBXGroup;
-			children = (
-				229861F2260F895100F7535A /* HNBUI.h */,
-				229861F3260F895100F7535A /* Info.plist */,
-				22986247260F8A3000F7535A /* TabBarController.swift */,
-				22986255260FB79D00F7535A /* TabBar.swift */,
-				221BC1DD26C9BF6F00E492C9 /* TabBarItemView.swift */,
-				221BC1DF26C9BFA200E492C9 /* Extensions.swift */,
-			);
-			path = HNBUI;
-			sourceTree = "<group>";
-		};
-		221B3311263F74CE00C7404E /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				221B3313263F74CE00C7404E /* HNBUITests */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		221B3313263F74CE00C7404E /* HNBUITests */ = {
-			isa = PBXGroup;
-			children = (
-				229861FF260F895100F7535A /* Info.plist */,
-				221B3332263F75D700C7404E /* HNBUITests.swift */,
-				221B3314263F74CE00C7404E /* XCTestManifests.swift */,
-			);
-			path = HNBUITests;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		229861E5260F895100F7535A = {
 			isa = PBXGroup;
 			children = (
-				221B3300263F74A400C7404E /* Package.swift */,
-				221B3305263F74B000C7404E /* README.md */,
-				221B330A263F74C600C7404E /* Sources */,
-				221B3311263F74CE00C7404E /* Tests */,
+				2204D08826DA98DE0031212A /* README.md */,
 				22986210260F89B800F7535A /* HNBUIDemo */,
 				229861F0260F895100F7535A /* Products */,
+				2204D08426DA97100031212A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		229861F0260F895100F7535A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				229861EF260F895100F7535A /* HNBUI.framework */,
-				229861F8260F895100F7535A /* HNBUITests.xctest */,
 				2298620F260F89B800F7535A /* HNBUIDemo.app */,
 			);
 			name = Products;
@@ -166,54 +81,7 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		229861EA260F895100F7535A /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				22986200260F895100F7535A /* HNBUI.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		229861EE260F895100F7535A /* HNBUI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 22986203260F895100F7535A /* Build configuration list for PBXNativeTarget "HNBUI" */;
-			buildPhases = (
-				229861EA260F895100F7535A /* Headers */,
-				229861EB260F895100F7535A /* Sources */,
-				229861EC260F895100F7535A /* Frameworks */,
-				229861ED260F895100F7535A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = HNBUI;
-			productName = HNBUI;
-			productReference = 229861EF260F895100F7535A /* HNBUI.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		229861F7260F895100F7535A /* HNBUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 22986206260F895100F7535A /* Build configuration list for PBXNativeTarget "HNBUITests" */;
-			buildPhases = (
-				229861F4260F895100F7535A /* Sources */,
-				229861F5260F895100F7535A /* Frameworks */,
-				229861F6260F895100F7535A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				229861FB260F895100F7535A /* PBXTargetDependency */,
-			);
-			name = HNBUITests;
-			productName = HNBUITests;
-			productReference = 229861F8260F895100F7535A /* HNBUITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		2298620E260F89B800F7535A /* HNBUIDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22986236260F89B900F7535A /* Build configuration list for PBXNativeTarget "HNBUIDemo" */;
@@ -225,9 +93,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				229862B72621F8F500F7535A /* PBXTargetDependency */,
 			);
 			name = HNBUIDemo;
+			packageProductDependencies = (
+				2204D08526DA97100031212A /* HNBUI */,
+			);
 			productName = HNBUIDemo;
 			productReference = 2298620F260F89B800F7535A /* HNBUIDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -241,19 +111,12 @@
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
-					229861EE260F895100F7535A = {
-						CreatedOnToolsVersion = 12.4;
-						LastSwiftMigration = 1240;
-					};
-					229861F7260F895100F7535A = {
-						CreatedOnToolsVersion = 12.4;
-					};
 					2298620E260F89B800F7535A = {
 						CreatedOnToolsVersion = 12.4;
 					};
 				};
 			};
-			buildConfigurationList = 229861E9260F895100F7535A /* Build configuration list for PBXProject "HNBUI" */;
+			buildConfigurationList = 229861E9260F895100F7535A /* Build configuration list for PBXProject "HNBUIDemo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -266,29 +129,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				229861EE260F895100F7535A /* HNBUI */,
-				229861F7260F895100F7535A /* HNBUITests */,
 				2298620E260F89B800F7535A /* HNBUIDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		229861ED260F895100F7535A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				221B3306263F74B000C7404E /* README.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		229861F6260F895100F7535A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2298620D260F89B800F7535A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,24 +147,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		229861EB260F895100F7535A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				22986256260FB79D00F7535A /* TabBar.swift in Sources */,
-				22986248260F8A3000F7535A /* TabBarController.swift in Sources */,
-				221BC1DE26C9BF6F00E492C9 /* TabBarItemView.swift in Sources */,
-				221BC1E026C9BFA200E492C9 /* Extensions.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		229861F4260F895100F7535A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2298620B260F89B800F7535A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -331,19 +159,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		229861FB260F895100F7535A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 229861EE260F895100F7535A /* HNBUI */;
-			targetProxy = 229861FA260F895100F7535A /* PBXContainerItemProxy */;
-		};
-		229862B72621F8F500F7535A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 229861EE260F895100F7535A /* HNBUI */;
-			targetProxy = 229862B62621F8F500F7535A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2298621C260F89B900F7535A /* LaunchScreen.storyboard */ = {
@@ -479,99 +294,6 @@
 			};
 			name = Release;
 		};
-		22986204260F895100F7535A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.9.0;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Sources/HNBUI/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 0.9.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kenichifujita.HNBUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		22986205260F895100F7535A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.9.0;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Sources/HNBUI/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 0.9.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kenichifujita.HNBUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		22986207260F895100F7535A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				INFOPLIST_FILE = Tests/HNBUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kenichifujita.HNBUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		22986208260F895100F7535A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 68WUA5UBKC;
-				INFOPLIST_FILE = Tests/HNBUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kenichifujita.HNBUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		22986237260F89B900F7535A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -613,29 +335,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		229861E9260F895100F7535A /* Build configuration list for PBXProject "HNBUI" */ = {
+		229861E9260F895100F7535A /* Build configuration list for PBXProject "HNBUIDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				22986201260F895100F7535A /* Debug */,
 				22986202260F895100F7535A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		22986203260F895100F7535A /* Build configuration list for PBXNativeTarget "HNBUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				22986204260F895100F7535A /* Debug */,
-				22986205260F895100F7535A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		22986206260F895100F7535A /* Build configuration list for PBXNativeTarget "HNBUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				22986207260F895100F7535A /* Debug */,
-				22986208260F895100F7535A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -650,6 +354,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2204D08526DA97100031212A /* HNBUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HNBUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 229861E6260F895100F7535A /* Project object */;
 }
