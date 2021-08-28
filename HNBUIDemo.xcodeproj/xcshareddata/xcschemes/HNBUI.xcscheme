@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2298620E260F89B800F7535A"
-               BuildableName = "HNBUIDemo.app"
-               BlueprintName = "HNBUIDemo"
-               ReferencedContainer = "container:HNBUI.xcodeproj">
+               BlueprintIdentifier = "229861EE260F895100F7535A"
+               BuildableName = "HNBUI.framework"
+               BlueprintName = "HNBUI"
+               ReferencedContainer = "container:HNBUIDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,16 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2298620E260F89B800F7535A"
-            BuildableName = "HNBUIDemo.app"
-            BlueprintName = "HNBUIDemo"
-            ReferencedContainer = "container:HNBUI.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -57,16 +47,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2298620E260F89B800F7535A"
-            BuildableName = "HNBUIDemo.app"
-            BlueprintName = "HNBUIDemo"
-            ReferencedContainer = "container:HNBUI.xcodeproj">
+            BlueprintIdentifier = "229861EE260F895100F7535A"
+            BuildableName = "HNBUI.framework"
+            BlueprintName = "HNBUI"
+            ReferencedContainer = "container:HNBUIDemo.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
