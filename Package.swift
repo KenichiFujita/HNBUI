@@ -23,7 +23,6 @@ let package = Package(
             name: "HNBUI",
             dependencies: [],
             path: "Sources",
-            resources: [.process("HNBUI/info.plist")]),
         .testTarget(
             name: "HNBUITests",
             dependencies: ["HNBUI"]),
