@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/kenichifujita/Documents/MyProject/HNBUI/HNBUIDemo.xcodeproj">
+      location = "group:Examples/HNBUIDemo/HNBUIDemo.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:HNBUI">
+      location = "group:">
    </FileRef>
 </Workspace>
