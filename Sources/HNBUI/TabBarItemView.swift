@@ -36,7 +36,7 @@ internal final class TabBarItemView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .callout).bold()
+        label.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.callout).bold()
         label.textAlignment = .center
         return label
     }()
