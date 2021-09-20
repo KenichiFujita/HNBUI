@@ -72,7 +72,7 @@ internal final class TabBarItemView: UIView {
         addSubview(hStackView)
 
         NSLayoutConstraint.activate([
-            hStackView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            hStackView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             hStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: directionalLayoutMargins.leading * 2),
             hStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -directionalLayoutMargins.trailing * 2),
             hStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
@@ -86,10 +86,15 @@ internal final class TabBarItemView: UIView {
     internal var didTapTabBarItem: (UITabBarItem) -> () = { _ in }
 
     internal func transitColor(withRatio ratio: CGFloat) {
-        let transitionColor = UIColor(red: tintColor.rgba.red - rgbaDifference.red * ratio,
+        var transitionColor = UIColor(red: tintColor.rgba.red - rgbaDifference.red * ratio,
                                       green: tintColor.rgba.green - rgbaDifference.green * ratio,
                                       blue: tintColor.rgba.blue - rgbaDifference.blue * ratio,
                                       alpha: tintColor.rgba.alpha - rgbaDifference.alpha * ratio)
+        if ratio == 0 {
+            transitionColor = tintColor
+        } else if ratio == 1 {
+            transitionColor = .secondaryLabel
+        }
         titleLabel.textColor = transitionColor
         itemImageView.tintColor = transitionColor
     }
