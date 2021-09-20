@@ -8,8 +8,13 @@
 import UIKit
 
 public protocol TabBarControllerDelegate: AnyObject {
-
     func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController)
+    func tabBarController(_ tabBarController: TabBarController, didTap viewController: UIViewController)
+}
+
+public extension TabBarControllerDelegate {
+    func tabBarController(_ tabBarController: TabBarController, didSelect viewController: UIViewController) {}
+    func tabBarController(_ tabBarController: TabBarController, didTap viewController: UIViewController) {}
 }
 
 open class TabBarController: UIViewController {
@@ -148,6 +153,10 @@ extension TabBarController: TabBarDelegate {
     public func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int) {
         selectedIndex = index
         delegate?.tabBarController(self, didSelect: viewControllers[index])
+    }
+
+    public func tabBar(_ tabBar: TabBar, didTapItem item: UITabBarItem, atIndex index: Int) {
+        delegate?.tabBarController(self, didTap: viewControllers[index])
     }
 
 }
