@@ -8,9 +8,8 @@
 import UIKit
 
 public protocol TabBarDelegate: AnyObject {
-
     func tabBar(_ tabBar: TabBar, didSelectItem item: UITabBarItem, atIndex index: Int)
-
+    func tabBar(_ tabBar: TabBar, didTapItem item: UITabBarItem, atIndex index: Int)
 }
 
 public final class TabBar: UIView {
@@ -161,6 +160,7 @@ public final class TabBar: UIView {
 
     private lazy var didTapTabBarItemCallback: (UITabBarItem) -> () = { [weak self] tabBarItem in
         guard let strongSelf = self, let index = strongSelf.items.firstIndex(of: tabBarItem) else { return }
+        self?.delegate?.tabBar(strongSelf, didTapItem: tabBarItem, atIndex: index)
         strongSelf.setContinuousIndex(CGFloat(index), animated: true)
     }
 

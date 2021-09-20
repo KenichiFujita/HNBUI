@@ -12,8 +12,9 @@ class TabBarViewController: TabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .systemBackground
+        delegate = self
 
         let topStoriesViewController = ViewController(tabBarItemTitle: "top",
                                                       tabBarItemImage: nil,
@@ -55,4 +56,15 @@ class TabBarViewController: TabBarController {
         return viewController
     }
     
+}
+
+extension TabBarViewController: TabBarControllerDelegate {
+
+    func tabBarController(_ tabBarController: TabBarController, didTap viewController: UIViewController) {
+        guard viewController == selectedViewController,
+              let viewController = viewController as? ViewController
+        else { return }
+        viewController.scrollToTop()
+    }
+
 }
