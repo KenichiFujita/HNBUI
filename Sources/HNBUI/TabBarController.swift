@@ -115,7 +115,7 @@ open class TabBarController: UIViewController {
             containerScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             containerScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            containerScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            containerScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
