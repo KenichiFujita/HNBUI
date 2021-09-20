@@ -15,27 +15,35 @@ class TabBarViewController: TabBarController {
         
         view.backgroundColor = .systemBackground
 
-        let topStoriesViewController = ViewController(tabBarItemTitle: "Top Stories",
+        let topStoriesViewController = ViewController(tabBarItemTitle: "top",
                                                       tabBarItemImage: nil,
                                                       backgroundColor: .blue)
-        let askHNStoriesViewController = ViewController(tabBarItemTitle: "Ask HN",
+        let newStoriesViewController = ViewController(tabBarItemTitle: "new",
                                                         tabBarItemImage: nil,
                                                         backgroundColor: .brown)
-        let showHNStoriesViewController = ViewController(tabBarItemTitle: "Show HN",
+        let askStoriesViewController = ViewController(tabBarItemTitle: "ask",
                                                          tabBarItemImage: nil,
                                                          backgroundColor: .cyan)
-        let searchStoriesViewController = ViewController(tabBarItemTitle: "Search",
+        let showStoriesViewController = ViewController(tabBarItemTitle: "show",
                                                          tabBarItemImage: nil,
                                                          backgroundColor: .darkGray)
-        let favoritesStoriesViewController = ViewController(tabBarItemTitle: "Favorite",
+        let jobStoriesViewController = ViewController(tabBarItemTitle: "job",
                                                             tabBarItemImage: nil,
                                                             backgroundColor: .green)
+        let bestStoriesViewController = ViewController(tabBarItemTitle: "best",
+                                                            tabBarItemImage: nil,
+                                                            backgroundColor: .orange)
+        let activeStoriesViewController = ViewController(tabBarItemTitle: "acrive",
+                                                            tabBarItemImage: nil,
+                                                            backgroundColor: .magenta)
         viewControllers = [
             topStoriesViewController,
-            askHNStoriesViewController,
-            showHNStoriesViewController,
-            searchStoriesViewController,
-            favoritesStoriesViewController
+            newStoriesViewController,
+            askStoriesViewController,
+            showStoriesViewController,
+            jobStoriesViewController,
+            bestStoriesViewController,
+            activeStoriesViewController
         ]
     }
     

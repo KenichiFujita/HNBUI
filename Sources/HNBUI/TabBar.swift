@@ -165,7 +165,7 @@ public final class TabBar: UIView {
     }
 
      private func setContinuousIndex(_ continuousIndex: CGFloat, animated: Bool) {
-        guard continuousIndex >= 0, Int(continuousIndex) < hStackView.arrangedSubviews.count else { return }
+        guard continuousIndex >= 0, Double(continuousIndex) <= Double(hStackView.arrangedSubviews.count - 1) else { return }
         self.continuousIndex = continuousIndex
         scrollView.setContentOffset(contentOffsetForContinuousIndex(continuousIndex), animated: animated)
         moveUnderBarView(toContinuousIndex: continuousIndex, animated: animated)
@@ -192,8 +192,8 @@ public final class TabBar: UIView {
         guard let leftTabBarItemView = leftTabBarItemView, let rightTabBarItemView = rightTabBarItemView else { return }
         let distanceBetweenItems =  (rightTabBarItemView.frame.origin.x - leftTabBarItemView.frame.origin.x) * continuousIndex.truncatingRemainder(dividingBy: 1)
         let widthDifference = (rightTabBarItemView.bounds.width - leftTabBarItemView.bounds.width) * continuousIndex.truncatingRemainder(dividingBy: 1)
-        underBarViewLeadingAnchorConstraint?.constant = leftTabBarItemView.frame.origin.x + distanceBetweenItems + directionalLayoutMargins.leading
-        underBarViewWidthAnchorConstraint?.constant = leftTabBarItemView.bounds.width + widthDifference - directionalLayoutMargins.leading * 2
+        underBarViewLeadingAnchorConstraint?.constant = leftTabBarItemView.frame.origin.x + distanceBetweenItems + directionalLayoutMargins.leading * 2
+        underBarViewWidthAnchorConstraint?.constant = leftTabBarItemView.bounds.width + widthDifference - directionalLayoutMargins.leading * 4
         if animated {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {[weak self] in
                 guard let strongSelf = self else { return }
